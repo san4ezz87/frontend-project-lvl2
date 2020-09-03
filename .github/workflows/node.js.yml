@@ -11,15 +11,13 @@ on:
 
 jobs:
   build:
-
+    environment: 
+      CC_TEST_REPORTER_ID: c699e06717acffa5de697389c4201a8d177905659df167679090b68350d055ca
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [12.x, 14.x]
-  - env: 
-      CC_TEST_REPORTER_ID: c699e06717acffa5de697389c4201a8d177905659df167679090b68350d055ca
-
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
