@@ -43,11 +43,15 @@ jobs:
   coverage:
     needs: [ test ]
     name: coverage
+    runs-on: ubuntu-latest
     steps:
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.6.0
-        env:
-          CC_TEST_REPORTER_ID: c699e06717acffa5de697389c4201a8d177905659df167679090b68350d055ca
-        with:
-          coverageCommand: make test-coverage
-          debug: true
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@master
+      with:
+        node-version: '12'
+    - run: npm ci
+    - uses: paambaati/codeclimate-action@v2.5.7
+      env:
+        CC_TEST_REPORTER_ID: c699e06717acffa5de697389c4201a8d177905659df167679090b68350d055ca
+      with:
+        coverageCommand: make test-coverage
