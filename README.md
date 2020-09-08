@@ -9,3 +9,6 @@
 
 ### YAML
 [![asciicast](https://asciinema.org/a/LWvBDluGu4fWTusXEbvqJf3fV.svg)](https://asciinema.org/a/LWvBDluGu4fWTusXEbvqJf3fV)
+
+### ini
+[![asciicast](https://asciinema.org/a/rQ3s3ESFLO4wBq2unJaIDoLYN.svg)](https://asciinema.org/a/rQ3s3ESFLO4wBq2unJaIDoLYN)
