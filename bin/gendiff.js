@@ -8,14 +8,22 @@ import genDiff from '../src/gendiff.js';
 function readFile(pathString) {
   const compoosedPath = path.resolve(process.cwd(), pathString);
   const fileUrl = new URL(`file://${compoosedPath}`);
-  let file;
+  let data;
+  const ext = path.extname(pathString);
+
   try {
-    file = fs.readFileSync(fileUrl, 'utf8');
+    data = fs.readFileSync(fileUrl, 'utf8');
   } catch (e) {
-    process.stdout.write('cant read file');
-    return '{}';
+    process.stdout.write('cant read file', e);
+    return {
+      ext,
+      data: '{}',
+    };
   }
-  return file;
+  return {
+    ext,
+    data,
+  };
 }
 
 const program = new commander.Command();

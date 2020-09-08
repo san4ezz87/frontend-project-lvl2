@@ -1,8 +1,10 @@
+import parse from './parsers.js';
+
 const genDiff = (first, second) => {
-  const firstObj = JSON.parse(first);
+  const firstObj = parse(first);
   const firstKeys = Object.keys(firstObj);
 
-  const secondObj = JSON.parse(second);
+  const secondObj = parse(second);
   const secondKeys = Object.keys(secondObj);
 
   const commonObj = { ...firstObj, ...secondObj };
