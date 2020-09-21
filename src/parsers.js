@@ -19,7 +19,7 @@ export const parseFileToJsObject = (file) => {
 const getTypeOf = (value) => Object.prototype.toString.call(value).slice(8, -1);
 
 export const buildAST = (obj) => {
-  const keys = Object.keys(obj).sort();
+  const keys = Object.keys(obj);
   return keys.reduce((acc, key) => {
     const value = obj[key];
     const type = getTypeOf(value);
@@ -63,24 +63,23 @@ export const buildDiffAst = (first, second) => {
     ...first,
     ...second,
   };
-  const commonKeys = Object.keys(commonObj);
-  const result = [];
+  const commonKeys = Object.keys(commonObj).sort();
+  const result = {};
   commonKeys.forEach((key) => {
     const firstElem = first[key];
     const secondElem = second[key];
-    // console.log({firstElem, secondElem});
     if (!firstElem && secondElem) {
       const node = {
         ...secondElem,
         status: 'added',
       };
-      result.push(node);
+      result[key] = node;
     } else if (firstElem && !secondElem) {
       const node = {
         ...firstElem,
         status: 'deleted',
       };
-      result.push(node);
+      result[key] = node;
     } else if (firstElem.type === 'Object' && secondElem.type === 'Object') {
       const value = buildDiffAst(firstElem.value, secondElem.value);
       const node = {
@@ -88,19 +87,19 @@ export const buildDiffAst = (first, second) => {
         value,
         status: 'notChanged',
       };
-      result.push(node);
+      result[key] = node;
     } else if (firstElem.type === 'Array' && secondElem.type === 'Array') {
       const node = {
         ...firstElem,
         status: 'notChanged',
       };
-      result.push(node);
+      result[key] = node;
     } else if (firstElem.value === secondElem.value) {
       const node = {
         ...secondElem,
         status: 'notChanged',
       };
-      result.push(node);
+      result[key] = node;
     } else if (firstElem.value !== secondElem.value) {
       const node = {
         ...firstElem,
@@ -110,18 +109,16 @@ export const buildDiffAst = (first, second) => {
         ...secondElem,
         status: 'added',
       };
-      result.push(node, node2);
+      const keyD = `${key}d`;
+      result[key] = node;
+      result[keyD] = node2;
     }
-  })
-
+  });
   return result;
 };
 
 export const parser = (firstObj, secondObj) => {
   const firstAstDiff = buildAST(firstObj);
-  // console.log({ firstAstDiff })
   const secondTwoAstDiff = buildAST(secondObj);
-  // console.log({ secondTwoAstDiff })
-  // console.log(buildDiffAst(firstAstDiff, secondTwoAstDiff))
   return buildDiffAst(firstAstDiff, secondTwoAstDiff);
 };

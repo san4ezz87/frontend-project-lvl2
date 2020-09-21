@@ -1,29 +1,32 @@
-const stylish = (tree) => {
-  const res = tree.map((node) => {
-    // console.log(node)
-    if (node.type === 'Object' && node.status !== 'deleted') {
-      return stylish(node.value);
-    }
-
-    if (node.status === 'deleted') {
-      return `- ${node.name}: ${node.value}`;
-    }
-
-    if (node.status === 'added') {
-      return `+ ${node.name}: ${node.value}`;
-    }
-
-    return ` ${node.name}: ${node.value}`;
-  }).join('\n');
-
-  return `{\n${res}\n}`;
+const signsMap = {
+  deleted: '- ',
+  added: '+ ',
+  notChanged: '  ',
+  undefined: '  ',
 };
 
-// const node = {
-//   name: '',
-//   type: ['string', 'number', 'Object', 'Array', 'boolean', 'null', 'undefined'],
-//   status: ['notChanged', 'deleted', 'added'],
-//   value: '',
-// }
+const stylish = (tree) => {
+  const iter = (treeIn, indentionCount) => {
+    const values = Object.values(treeIn).sort();
+    const indention = '  '.repeat(indentionCount);
+    const res = values.map((node) => {
+      if (!node.status) {
+        if (node.type === 'Object') {
+          return `${indention}${signsMap[node.status]}${node.name}: {\n${iter(node.value, indentionCount + 2)}\n  ${indention}}`;
+        }
+        return `${indention}${signsMap[node.status]}${node.name}: ${node.value}`;
+      }
+
+      if (node.type === 'Object') {
+        return `${indention}${signsMap[node.status]}${node.name}: {\n${iter(node.value, indentionCount + 2)}\n  ${indention}}`;
+      }
+      return `${indention}${signsMap[node.status]}${node.name}: ${node.value}`;
+    }).join('\n');
+    return res;
+  };
+
+  const result = iter(tree, 1);
+  return `{\n${result}\n}`;
+};
 
 export default stylish;
