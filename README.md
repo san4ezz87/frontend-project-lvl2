@@ -12,3 +12,6 @@
 
 ### ini
 [![asciicast](https://asciinema.org/a/rQ3s3ESFLO4wBq2unJaIDoLYN.svg)](https://asciinema.org/a/rQ3s3ESFLO4wBq2unJaIDoLYN)
+
+### Recursive structure
+[![asciicast](https://asciinema.org/a/VZscmBjsEOJ1kyNA21df7Xd2N.svg)](https://asciinema.org/a/VZscmBjsEOJ1kyNA21df7Xd2N)
