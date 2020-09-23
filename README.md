@@ -15,3 +15,6 @@
 
 ### Recursive structure
 [![asciicast](https://asciinema.org/a/VZscmBjsEOJ1kyNA21df7Xd2N.svg)](https://asciinema.org/a/VZscmBjsEOJ1kyNA21df7Xd2N)
+
+### Recursive structure plain
+[![asciicast](https://asciinema.org/a/59Y7Lf3nMvKwAz1sGmIczcxwm.svg)](https://asciinema.org/a/59Y7Lf3nMvKwAz1sGmIczcxwm)

@@ -58,7 +58,7 @@ export const buildAST = (obj) => {
   }, {});
 };
 
-export const buildDiffAst = (first, second) => {
+export const buildDiffAst = (first, second, parent) => {
   const commonObj = {
     ...first,
     ...second,
@@ -77,6 +77,7 @@ export const buildDiffAst = (first, second) => {
         valueOld: null,
         valueNew: secondElem.value,
         status: 'added',
+        parent,
       };
       result[key] = node;
     } else if (firstElem && !secondElem) {
@@ -87,10 +88,11 @@ export const buildDiffAst = (first, second) => {
         valueOld: firstElem.value,
         valueNew: null,
         status: 'deleted',
+        parent,
       };
       result[key] = node;
     } else if (firstElem.type === 'Object' && secondElem.type === 'Object') {
-      const value = buildDiffAst(firstElem.value, secondElem.value);
+      const value = buildDiffAst(firstElem.value, secondElem.value, [...parent, firstElem.name]);
       const node = {
         name: firstElem.name,
         typeOld: firstElem.type,
@@ -98,6 +100,7 @@ export const buildDiffAst = (first, second) => {
         valueOld: value,
         valueNew: value,
         status: 'notChanged',
+        parent,
       };
       result[key] = node;
     } else if (firstElem.type === 'Array' && secondElem.type === 'Array') {
@@ -108,6 +111,7 @@ export const buildDiffAst = (first, second) => {
         valueOld: firstElem.value,
         valueNew: secondElem.value,
         status: 'notChanged',
+        parent,
       };
       result[key] = node;
     } else if (firstElem.value === secondElem.value) {
@@ -118,6 +122,7 @@ export const buildDiffAst = (first, second) => {
         valueOld: firstElem.value,
         valueNew: secondElem.value,
         status: 'notChanged',
+        parent,
       };
 
       result[key] = node;
@@ -129,6 +134,7 @@ export const buildDiffAst = (first, second) => {
         valueOld: firstElem.value,
         valueNew: secondElem.value,
         status: 'changed',
+        parent,
       };
       result[key] = node;
     }
@@ -139,15 +145,5 @@ export const buildDiffAst = (first, second) => {
 export const parser = (firstObj, secondObj) => {
   const firstAstDiff = buildAST(firstObj);
   const secondTwoAstDiff = buildAST(secondObj);
-  return buildDiffAst(firstAstDiff, secondTwoAstDiff);
+  return buildDiffAst(firstAstDiff, secondTwoAstDiff, []);
 };
-
-
-// {
-//   name: key,
-//   typeOld,
-//   valueOld: children,
-//   typeNew:
-//   valueNew: children,
-//   status
-// }

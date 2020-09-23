@@ -35,7 +35,10 @@ program.version('0.0.1', '-v, --vers', 'output the current version')
   .action((smth, env) => {
     const files = env.map((file) => readFile(file));
     const [first, second] = files;
-    const result = genDiff(first, second, getFormater());
+
+    const formater = getFormater(program.format);
+
+    const result = genDiff(first, second, formater);
     process.stdout.write(result);
   });
 
