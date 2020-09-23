@@ -68,50 +68,69 @@ export const buildDiffAst = (first, second) => {
   commonKeys.forEach((key) => {
     const firstElem = first[key];
     const secondElem = second[key];
+    // console.log({firstElem, secondElem});
     if (!firstElem && secondElem) {
       const node = {
-        ...secondElem,
+        name: secondElem.name,
+        typeOld: null,
+        typeNew: secondElem.type,
+        valueOld: null,
+        valueNew: secondElem.value,
         status: 'added',
       };
       result[key] = node;
     } else if (firstElem && !secondElem) {
       const node = {
-        ...firstElem,
+        name: firstElem.name,
+        typeOld: firstElem.type,
+        typeNew: null,
+        valueOld: firstElem.value,
+        valueNew: null,
         status: 'deleted',
       };
       result[key] = node;
     } else if (firstElem.type === 'Object' && secondElem.type === 'Object') {
       const value = buildDiffAst(firstElem.value, secondElem.value);
       const node = {
-        ...secondElem,
-        value,
+        name: firstElem.name,
+        typeOld: firstElem.type,
+        typeNew: secondElem.type,
+        valueOld: value,
+        valueNew: value,
         status: 'notChanged',
       };
       result[key] = node;
     } else if (firstElem.type === 'Array' && secondElem.type === 'Array') {
       const node = {
-        ...firstElem,
+        name: firstElem.name,
+        typeOld: firstElem.type,
+        typeNew: secondElem.type,
+        valueOld: firstElem.value,
+        valueNew: secondElem.value,
         status: 'notChanged',
       };
       result[key] = node;
     } else if (firstElem.value === secondElem.value) {
       const node = {
-        ...secondElem,
+        name: firstElem.name,
+        typeOld: firstElem.type,
+        typeNew: secondElem.type,
+        valueOld: firstElem.value,
+        valueNew: secondElem.value,
         status: 'notChanged',
       };
+
       result[key] = node;
     } else if (firstElem.value !== secondElem.value) {
       const node = {
-        ...firstElem,
-        status: 'deleted',
+        name: firstElem.name,
+        typeOld: firstElem.type,
+        typeNew: secondElem.type,
+        valueOld: firstElem.value,
+        valueNew: secondElem.value,
+        status: 'changed',
       };
-      const node2 = {
-        ...secondElem,
-        status: 'added',
-      };
-      const keyD = `${key}d`;
       result[key] = node;
-      result[keyD] = node2;
     }
   });
   return result;
@@ -122,3 +141,13 @@ export const parser = (firstObj, secondObj) => {
   const secondTwoAstDiff = buildAST(secondObj);
   return buildDiffAst(firstAstDiff, secondTwoAstDiff);
 };
+
+
+// {
+//   name: key,
+//   typeOld,
+//   valueOld: children,
+//   typeNew:
+//   valueNew: children,
+//   status
+// }

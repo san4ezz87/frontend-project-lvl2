@@ -4,7 +4,7 @@ import commander from 'commander';
 import fs from 'fs';
 import path from 'path';
 import genDiff from '../src/gendiff.js';
-import stylish from '../src/formaters.js';
+import getFormater from '../src/formatters/index.js';
 
 function readFile(pathString) {
   const compoosedPath = path.resolve(process.cwd(), pathString);
@@ -34,13 +34,8 @@ program.version('0.0.1', '-v, --vers', 'output the current version')
   .option('-f, --format [type]', 'output format', 'stylish')
   .action((smth, env) => {
     const files = env.map((file) => readFile(file));
-    const formatersList = {
-      stylish,
-    };
-
-    const formater = formatersList[program.format];
     const [first, second] = files;
-    const result = genDiff(first, second, formater);
+    const result = genDiff(first, second, getFormater());
     process.stdout.write(result);
   });
 
