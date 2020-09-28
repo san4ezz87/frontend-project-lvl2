@@ -17,4 +17,7 @@
 [![asciicast](https://asciinema.org/a/VZscmBjsEOJ1kyNA21df7Xd2N.svg)](https://asciinema.org/a/VZscmBjsEOJ1kyNA21df7Xd2N)
 
 ### Recursive structure plain
-[![asciicast](https://asciinema.org/a/59Y7Lf3nMvKwAz1sGmIczcxwm.svg)](https://asciinema.org/a/59Y7Lf3nMvKwAz1sGmIczcxwm)
+[![asciicast](https://asciinema.org/a/59Y7Lf3nMvKwAz1sGmIczcxwm.svg)](https://asciinema.org/a/59Y7Lf3nMvKwAz1sGmIczcxwm) 
+
+### Recursive structure json
+[![asciicast](https://asciinema.org/a/q0KLQm95jWmbRqzOmz6eIm89R.svg)](https://asciinema.org/a/q0KLQm95jWmbRqzOmz6eIm89R)

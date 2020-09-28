@@ -96,9 +96,9 @@ export const buildDiffAst = (first, second, parent) => {
       const node = {
         name: firstElem.name,
         typeOld: firstElem.type,
-        typeNew: secondElem.type,
+        typeNew: null,
         valueOld: value,
-        valueNew: value,
+        valueNew: null,
         status: 'notChanged',
         parent,
       };
@@ -107,9 +107,9 @@ export const buildDiffAst = (first, second, parent) => {
       const node = {
         name: firstElem.name,
         typeOld: firstElem.type,
-        typeNew: secondElem.type,
+        typeNew: null,
         valueOld: firstElem.value,
-        valueNew: secondElem.value,
+        valueNew: null,
         status: 'notChanged',
         parent,
       };
@@ -118,9 +118,9 @@ export const buildDiffAst = (first, second, parent) => {
       const node = {
         name: firstElem.name,
         typeOld: firstElem.type,
-        typeNew: secondElem.type,
+        typeNew: null,
         valueOld: firstElem.value,
-        valueNew: secondElem.value,
+        valueNew: null,
         status: 'notChanged',
         parent,
       };

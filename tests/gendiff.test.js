@@ -114,85 +114,269 @@ test('Build AST', () => {
   expect(buildAST(exemple)).toMatchObject(res);
 });
 
-// test('Build Diff AST', () => {
-//   const exemple = {
-//     host: 'hexlet.io',
-//     timeout: 50,
-//     proxy: '123.234.53.22.11',
-//     some: {
-//       alex: 'smirnov',
-//     },
-//     follow: false,
-//     new: [1, 3, { a: 0 }],
-//   };
-
-//   const exemple2 = {
-//     host: 'hexlet.io',
-//     timeout: 'aa',
-//     proxy: '123.234.53.22',
-//     some: {
-//       alex: 'smirnov',
-//     },
-//     follow: false,
-//     new: [1, 3, { a: 0 }],
-//   };
-
-//   const res = {
-//     follow: {
-//       name: 'follow',
-//       type: 'Boolean',
-//       value: false,
-//       status: 'notChanged',
-//     },
-//     host: {
-//       name: 'host',
-//       type: 'String',
-//       value: 'hexlet.io',
-//       status: 'notChanged',
-//     },
-//     new: {
-//       name: 'new',
-//       type: 'Array',
-//       value: [1, 3, { a: 0 }],
-//       status: 'notChanged',
-//     },
-//     proxy: {
-//       name: 'proxy',
-//       type: 'String',
-//       value: '123.234.53.22.11',
-//       status: 'deleted',
-//     },
-//     proxyd: {
-//       name: 'proxy',
-//       type: 'String',
-//       value: '123.234.53.22',
-//       status: 'added',
-//     },
-//     some: {
-//       name: 'some',
-//       type: 'Object',
-//       value: {
-//         alex: {
-//           name: 'alex',
-//           type: 'String',
-//           value: 'smirnov',
-//           status: 'notChanged',
-//         },
-//       },
-//       status: 'notChanged',
-//     },
-//     timeout: {
-//       name: 'timeout',
-//       type: 'Number',
-//       value: 50,
-//       status: 'deleted',
-//     },
-//     timeoutd: {
-//       name: 'timeout',
-//       type: 'String',
-//       value: 'aa',
-//       status: 'added',
-//     },
-//   };
-//   expect(res).toMatchObject(parser(exemple, exemple2));
-// });
+const recursiveResultJson = `{
+  "common": {
+    "name": "common",
+    "typeOld": "Object",
+    "typeNew": null,
+    "valueOld": {
+      "follow": {
+        "name": "follow",
+        "typeOld": null,
+        "typeNew": "Boolean",
+        "valueOld": null,
+        "valueNew": false,
+        "status": "added",
+        "parent": [
+          "common"
+        ]
+      },
+      "setting1": {
+        "name": "setting1",
+        "typeOld": "String",
+        "typeNew": null,
+        "valueOld": "Value 1",
+        "valueNew": null,
+        "status": "notChanged",
+        "parent": [
+          "common"
+        ]
+      },
+      "setting2": {
+        "name": "setting2",
+        "typeOld": "Number",
+        "typeNew": null,
+        "valueOld": 200,
+        "valueNew": null,
+        "status": "deleted",
+        "parent": [
+          "common"
+        ]
+      },
+      "setting3": {
+        "name": "setting3",
+        "typeOld": "Boolean",
+        "typeNew": "Object",
+        "valueOld": true,
+        "valueNew": {
+          "key": {
+            "name": "key",
+            "type": "String",
+            "value": "value"
+          }
+        },
+        "status": "changed",
+        "parent": [
+          "common"
+        ]
+      },
+      "setting4": {
+        "name": "setting4",
+        "typeOld": null,
+        "typeNew": "String",
+        "valueOld": null,
+        "valueNew": "blah blah",
+        "status": "added",
+        "parent": [
+          "common"
+        ]
+      },
+      "setting5": {
+        "name": "setting5",
+        "typeOld": null,
+        "typeNew": "Object",
+        "valueOld": null,
+        "valueNew": {
+          "key5": {
+            "name": "key5",
+            "type": "String",
+            "value": "value5"
+          }
+        },
+        "status": "added",
+        "parent": [
+          "common"
+        ]
+      },
+      "setting6": {
+        "name": "setting6",
+        "typeOld": "Object",
+        "typeNew": null,
+        "valueOld": {
+          "doge": {
+            "name": "doge",
+            "typeOld": "Object",
+            "typeNew": null,
+            "valueOld": {
+              "wow": {
+                "name": "wow",
+                "typeOld": "String",
+                "typeNew": "String",
+                "valueOld": "too much",
+                "valueNew": "so much",
+                "status": "changed",
+                "parent": [
+                  "common",
+                  "setting6",
+                  "doge"
+                ]
+              }
+            },
+            "valueNew": null,
+            "status": "notChanged",
+            "parent": [
+              "common",
+              "setting6"
+            ]
+          },
+          "key": {
+            "name": "key",
+            "typeOld": "String",
+            "typeNew": null,
+            "valueOld": "value",
+            "valueNew": null,
+            "status": "notChanged",
+            "parent": [
+              "common",
+              "setting6"
+            ]
+          },
+          "ops": {
+            "name": "ops",
+            "typeOld": null,
+            "typeNew": "String",
+            "valueOld": null,
+            "valueNew": "vops",
+            "status": "added",
+            "parent": [
+              "common",
+              "setting6"
+            ]
+          }
+        },
+        "valueNew": null,
+        "status": "notChanged",
+        "parent": [
+          "common"
+        ]
+      }
+    },
+    "valueNew": null,
+    "status": "notChanged",
+    "parent": []
+  },
+  "group1": {
+    "name": "group1",
+    "typeOld": "Object",
+    "typeNew": null,
+    "valueOld": {
+      "baz": {
+        "name": "baz",
+        "typeOld": "String",
+        "typeNew": "String",
+        "valueOld": "bas",
+        "valueNew": "bars",
+        "status": "changed",
+        "parent": [
+          "group1"
+        ]
+      },
+      "foo": {
+        "name": "foo",
+        "typeOld": "String",
+        "typeNew": null,
+        "valueOld": "bar",
+        "valueNew": null,
+        "status": "notChanged",
+        "parent": [
+          "group1"
+        ]
+      },
+      "nest": {
+        "name": "nest",
+        "typeOld": "Object",
+        "typeNew": "String",
+        "valueOld": {
+          "key": {
+            "name": "key",
+            "type": "String",
+            "value": "value"
+          }
+        },
+        "valueNew": "str",
+        "status": "changed",
+        "parent": [
+          "group1"
+        ]
+      }
+    },
+    "valueNew": null,
+    "status": "notChanged",
+    "parent": []
+  },
+  "group2": {
+    "name": "group2",
+    "typeOld": "Object",
+    "typeNew": null,
+    "valueOld": {
+      "abc": {
+        "name": "abc",
+        "type": "Number",
+        "value": 12345
+      },
+      "deep": {
+        "name": "deep",
+        "type": "Object",
+        "value": {
+          "id": {
+            "name": "id",
+            "type": "Number",
+            "value": 45
+          }
+        }
+      }
+    },
+    "valueNew": null,
+    "status": "deleted",
+    "parent": []
+  },
+  "group3": {
+    "name": "group3",
+    "typeOld": null,
+    "typeNew": "Object",
+    "valueOld": null,
+    "valueNew": {
+      "fee": {
+        "name": "fee",
+        "type": "Number",
+        "value": 100500
+      },
+      "deep": {
+        "name": "deep",
+        "type": "Object",
+        "value": {
+          "id": {
+            "name": "id",
+            "type": "Object",
+            "value": {
+              "number": {
+                "name": "number",
+                "type": "Number",
+                "value": 45
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": "added",
+    "parent": []
+  }
+}`;
+test.each([
+  ['file1Big.json', 'file2Big.json', recursiveResultJson],
+])('compare two recursive obj in JSON format', (first, second, expected) => {
+  const file1 = readFile(first);
+  const file2 = readFile(second);
+  expect(genDiff(file1, file2, getFormater('json'))).toBe(expected);
+});
