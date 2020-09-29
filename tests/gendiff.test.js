@@ -5,6 +5,24 @@ import {
 import { readFile } from './getFixturePath.js';
 import getFormater from '../src/formatters/index.js';
 
+const result = `{
+  - follow: false
+    host: hexlet.io
+  - proxy: 123.234.53.22
+  - timeout: 50
+  + timeout: 20
+  + verbose: true
+}`;
+
+test.each([
+  ['file1.ini', 'file2.ini', result],
+  ['file1.yml', 'file2.yml', result],
+])('different formats of files, ini, yml with stylish formatter', (file1, file2, expected) => {
+  const file1Res = readFile(file1);
+  const file2Res = readFile(file2);
+  expect(genDiff(file1Res, file2Res, getFormater())).toBe(expected);
+});
+
 test('compare two recursive obj with plain formater', () => {
   const file1 = readFile('fileOneNested.json');
   const file2 = readFile('fileTwoNested.json');
@@ -12,14 +30,14 @@ test('compare two recursive obj with plain formater', () => {
   expect(genDiff(file1, file2, getFormater('plain'))).toBe(expected.data);
 });
 
-test('compare two recursive obj with stylish formater', () => {
+test('compare two recursive obj with stylish formatter', () => {
   const file1 = readFile('fileOneNested.json');
   const file2 = readFile('fileTwoNested.json');
   const expected = readFile('resultNestedStylish.txt');
   expect(genDiff(file1, file2, getFormater())).toBe(expected.data);
 });
 
-test('compare two recursive obj with JSON formater', () => {
+test('compare two recursive obj with JSON formatter', () => {
   const file1 = readFile('fileOneNested.json');
   const file2 = readFile('fileTwoNested.json');
   const expected = readFile('resultNestedJson.json');
