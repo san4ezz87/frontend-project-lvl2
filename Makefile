@@ -1,5 +1,5 @@
 lint:
-	npx eslint --format json .
+	npx eslint .
 
 test:
 	npm run test
