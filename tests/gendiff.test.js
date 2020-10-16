@@ -23,25 +23,15 @@ test.each([
   expect(genDiff(file1Res, file2Res, getFormater())).toBe(expected);
 });
 
-test('compare two recursive obj with plain formater', () => {
+test.each([
+  ['defaul', 'resultNestedStylish.txt'],
+  ['plain', 'resultNestedPlain.txt'],
+  ['json', 'resultNestedJson.json'],
+])('compare two recursive obj with %s formater', (formaterType, fixtureFile) => {
   const file1 = readFile('fileOneNested.json');
   const file2 = readFile('fileTwoNested.json');
-  const expected = readFile('resultNestedPlain.txt');
-  expect(genDiff(file1, file2, getFormater('plain'))).toBe(expected.data);
-});
-
-test('compare two recursive obj with stylish formatter', () => {
-  const file1 = readFile('fileOneNested.json');
-  const file2 = readFile('fileTwoNested.json');
-  const expected = readFile('resultNestedStylish.txt');
-  expect(genDiff(file1, file2, getFormater())).toBe(expected.data);
-});
-
-test('compare two recursive obj with JSON formatter', () => {
-  const file1 = readFile('fileOneNested.json');
-  const file2 = readFile('fileTwoNested.json');
-  const expected = readFile('resultNestedJson.json');
-  expect(genDiff(file1, file2, getFormater('json'))).toBe(expected.data);
+  const expected = readFile(fixtureFile);
+  expect(genDiff(file1, file2, getFormater(formaterType))).toBe(expected.data);
 });
 
 test('Build AST', () => {
