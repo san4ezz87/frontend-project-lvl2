@@ -15,7 +15,8 @@ function readFile(pathString) {
   try {
     data = fs.readFileSync(fileUrl, 'utf8');
   } catch (e) {
-    process.stdout.write('cant read file', e);
+    // eslint-disable-next-line no-console
+    console.log('cant read file', e);
     return {
       ext,
       data: '{}',
@@ -39,7 +40,8 @@ program.version('0.0.1', '-v, --vers', 'output the current version')
     const formater = getFormater(program.format);
 
     const result = genDiff(first, second, formater);
-    process.stdout.write(result);
+    // eslint-disable-next-line no-console
+    console.log(result);
   });
 
 program.parse(process.argv);
