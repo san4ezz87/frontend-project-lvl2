@@ -15,11 +15,11 @@ const result = `{
 }`;
 
 test.each([
-  ['file1.ini', 'file2.ini', result],
-  ['file1.yml', 'file2.yml', result],
-])('different formats of files, ini, yml with stylish formatter', (file1, file2, expected) => {
-  const file1Res = readFile(file1);
-  const file2Res = readFile(file2);
+  ['ini', result],
+  ['yml', result],
+])('different formats of files, ini, yml with stylish formatter', (extansion, expected) => {
+  const file1Res = readFile(`file1.${extansion}`);
+  const file2Res = readFile(`file2.${extansion}`);
   expect(genDiff(file1Res, file2Res, getFormater())).toBe(expected);
 });
 
