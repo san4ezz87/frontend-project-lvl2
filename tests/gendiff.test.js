@@ -1,7 +1,5 @@
 import genDiff from '../src/gendiff.js';
-import {
-  buildAST,
-} from '../src/parsers';
+import buildAST from '../src/buildAST.js';
 import readFile from '../utils/readFile.js';
 import getFixturePath from '../utils/getFixturePath.js';
 
