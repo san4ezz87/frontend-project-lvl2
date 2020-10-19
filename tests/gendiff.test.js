@@ -2,8 +2,8 @@ import genDiff from '../src/gendiff.js';
 import {
   buildAST,
 } from '../src/parsers';
-import { readFile } from './getFixturePath.js';
-import getFormater from '../src/formatters/index.js';
+import readFile from '../utils/readFile.js';
+import getFixturePath from '../utils/getFixturePath.js';
 
 const result = `{
   - follow: false
@@ -18,9 +18,10 @@ test.each([
   ['ini', result],
   ['yml', result],
 ])('different formats of files, ini, yml with stylish formatter', (extansion, expected) => {
-  const file1Res = readFile(`file1.${extansion}`);
-  const file2Res = readFile(`file2.${extansion}`);
-  expect(genDiff(file1Res, file2Res, getFormater())).toBe(expected);
+  const pathOne = getFixturePath(`file1.${extansion}`);
+  const pathTwo = getFixturePath(`file2.${extansion}`);
+
+  expect(genDiff(pathOne, pathTwo, '')).toBe(expected);
 });
 
 test.each([
@@ -28,10 +29,11 @@ test.each([
   ['plain', 'resultNestedPlain.txt'],
   ['json', 'resultNestedJson.json'],
 ])('compare two recursive obj with %s formater', (formaterType, fixtureFile) => {
-  const file1 = readFile('fileOneNested.json');
-  const file2 = readFile('fileTwoNested.json');
-  const expected = readFile(fixtureFile);
-  expect(genDiff(file1, file2, getFormater(formaterType))).toBe(expected.data);
+  const pathOne = getFixturePath('fileOneNested.json');
+  const pathTwo = getFixturePath('fileTwoNested.json');
+
+  const expected = readFile(getFixturePath(fixtureFile));
+  expect(genDiff(pathOne, pathTwo, formaterType)).toBe(expected.data);
 });
 
 test('Build AST', () => {

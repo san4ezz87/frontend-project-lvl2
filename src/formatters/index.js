@@ -2,16 +2,17 @@ import stylish from './stylish.js';
 import plain from './plain.js';
 import json from './json.js';
 
+const formaters = {
+  plain,
+  json,
+  stylish,
+  default: stylish,
+};
+
 const getFormater = (type) => {
-  if (type === 'plain') {
-    return plain;
-  }
+  const formater = formaters[type];
 
-  if (type === 'json') {
-    return json;
-  }
-
-  return stylish;
+  return formater || stylish;
 };
 
 export default getFormater;
