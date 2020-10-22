@@ -8,8 +8,8 @@ const plain = (tree) => {
         return [...acc, node];
       }
 
-      if (node.type === 'Object' || node.typeOld === 'Object') {
-        return [...acc, ...iter(node.valueOld, [])];
+      if (node.children) {
+        return [...acc, ...iter(node.children, [])];
       }
       return [...acc];
     }, accum);
@@ -20,18 +20,25 @@ const plain = (tree) => {
   const result = filteredNodes.map((node) => {
     const path = [...node.parent, node.name].join('.');
 
-    const valueOld = node.typeOld === 'Object' ? '[complex value]' : node.valueOld;
-    const valueOldTyped = node.typeOld === 'String' ? `'${valueOld}'` : valueOld;
+    const valueOldTyped = typeof node.valueOld === 'string' ? `'${node.valueOld}'` : node.valueOld;
+    const valueNewTyped = typeof node.valueNew === 'string' ? `'${node.valueNew}'` : node.valueNew;
 
-    const valueNew = node.typeNew === 'Object' ? '[complex value]' : node.valueNew;
-    const valueNewTyped = node.typeNew === 'String' ? `'${valueNew}'` : valueNew;
 
     if (node.status === 'added') {
-      return `Property '${path}' was added with value: ${valueNewTyped}`;
+      const value = node.children ? '[complex value]' : valueNewTyped;
+      return `Property '${path}' was added with value: ${value}`;
     }
 
     if (node.status === 'deleted') {
       return `Property '${path}' was removed`;
+    }
+
+    if (node.children && node.valueOld) {
+      return `Property '${path}' was updated. From ${valueOldTyped} to [complex value]`;
+    }
+
+    if (node.children && node.valueNew) {
+      return `Property '${path}' was updated. From [complex value] to ${valueNewTyped}`;
     }
 
     return `Property '${path}' was updated. From ${valueOldTyped} to ${valueNewTyped}`;
