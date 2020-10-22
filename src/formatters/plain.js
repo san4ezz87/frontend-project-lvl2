@@ -23,7 +23,6 @@ const plain = (tree) => {
     const valueOldTyped = typeof node.valueOld === 'string' ? `'${node.valueOld}'` : node.valueOld;
     const valueNewTyped = typeof node.valueNew === 'string' ? `'${node.valueNew}'` : node.valueNew;
 
-
     if (node.status === 'added') {
       const value = node.children ? '[complex value]' : valueNewTyped;
       return `Property '${path}' was added with value: ${value}`;
