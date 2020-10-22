@@ -12,42 +12,39 @@ const buildDiffAst = (first, second, parent) => {
     if (!firstElem && secondElem) {
       const node = {
         name: secondElem.name,
-        typeOld: null,
-        typeNew: secondElem.type,
         valueOld: null,
         valueNew: secondElem.value,
         status: 'added',
+        children: secondElem.children,
         parent,
       };
       result[key] = node;
     } else if (firstElem && !secondElem) {
       const node = {
         name: firstElem.name,
-        typeOld: firstElem.type,
-        typeNew: null,
         valueOld: firstElem.value,
         valueNew: null,
         status: 'deleted',
+        children: firstElem.children,
         parent,
       };
       result[key] = node;
-    } else if (firstElem.type === 'Object' && secondElem.type === 'Object') {
-      const value = buildDiffAst(firstElem.value, secondElem.value, [...parent, firstElem.name]);
+    } else if (firstElem.children && secondElem.children) {
+      const children = buildDiffAst(
+        firstElem.children,
+        secondElem.children,
+        [...parent, firstElem.name],
+      );
       const node = {
         name: firstElem.name,
-        typeOld: firstElem.type,
-        typeNew: null,
-        valueOld: value,
-        valueNew: null,
         status: 'notChanged',
+        children,
         parent,
       };
       result[key] = node;
-    } else if (firstElem.type === 'Array' && secondElem.type === 'Array') {
+    } else if (firstElem.type === 'Array') {
       const node = {
         name: firstElem.name,
-        typeOld: firstElem.type,
-        typeNew: null,
         valueOld: firstElem.value,
         valueNew: null,
         status: 'notChanged',
@@ -57,8 +54,6 @@ const buildDiffAst = (first, second, parent) => {
     } else if (firstElem.value === secondElem.value) {
       const node = {
         name: firstElem.name,
-        typeOld: firstElem.type,
-        typeNew: null,
         valueOld: firstElem.value,
         valueNew: null,
         status: 'notChanged',
@@ -67,13 +62,13 @@ const buildDiffAst = (first, second, parent) => {
 
       result[key] = node;
     } else if (firstElem.value !== secondElem.value) {
+      const children = firstElem.children || secondElem.children;
       const node = {
         name: firstElem.name,
-        typeOld: firstElem.type,
-        typeNew: secondElem.type,
         valueOld: firstElem.value,
         valueNew: secondElem.value,
         status: 'changed',
+        children,
         parent,
       };
       result[key] = node;

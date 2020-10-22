@@ -13,18 +13,7 @@ const buildAST = (obj) => {
         [key]: {
           name: key,
           type,
-          value: children,
-        },
-      };
-    }
-
-    if (type === 'Array') {
-      return {
-        ...acc,
-        [key]: {
-          name: key,
-          type,
-          value,
+          children,
         },
       };
     }

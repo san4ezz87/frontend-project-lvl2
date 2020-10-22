@@ -4,7 +4,8 @@ import buildAST from './buildAST.js';
 const parse = (firstObj, secondObj) => {
   const firstAstDiff = buildAST(firstObj);
   const secondTwoAstDiff = buildAST(secondObj);
-  return buildDiffAst(firstAstDiff, secondTwoAstDiff, []);
+  const diff = buildDiffAst(firstAstDiff, secondTwoAstDiff, []);
+  return diff;
 };
 
 export default parse;
