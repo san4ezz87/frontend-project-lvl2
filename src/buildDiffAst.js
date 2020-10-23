@@ -1,3 +1,5 @@
+import hasObjectKey from '../utils/hasObjectKey.js';
+
 const buildDiffAst = (first, second, parent) => {
   const commonObj = {
     ...first,
@@ -8,28 +10,32 @@ const buildDiffAst = (first, second, parent) => {
   commonKeys.forEach((key) => {
     const firstElem = first[key];
     const secondElem = second[key];
-    // console.log({firstElem, secondElem});
-    if (!firstElem && secondElem) {
+
+    if (!hasObjectKey(first, key) && hasObjectKey(second, key)) {
+      const children = { children: secondElem.children };
+      const hasChildren = hasObjectKey(secondElem, 'children');
+
       const node = {
         name: secondElem.name,
-        valueOld: null,
         valueNew: secondElem.value,
         status: 'added',
-        children: secondElem.children,
+        ...(hasChildren && children),
         parent,
       };
       result[key] = node;
-    } else if (firstElem && !secondElem) {
+    } else if (hasObjectKey(first, key) && !hasObjectKey(second, key)) {
+      const children = { children: firstElem.children };
+      const hasChildren = hasObjectKey(firstElem, 'children');
+
       const node = {
         name: firstElem.name,
         valueOld: firstElem.value,
-        valueNew: null,
         status: 'deleted',
-        children: firstElem.children,
+        ...(hasChildren && children),
         parent,
       };
       result[key] = node;
-    } else if (firstElem.children && secondElem.children) {
+    } else if (hasObjectKey(firstElem, 'children') && hasObjectKey(secondElem, 'children')) {
       const children = buildDiffAst(
         firstElem.children,
         secondElem.children,
@@ -42,33 +48,31 @@ const buildDiffAst = (first, second, parent) => {
         parent,
       };
       result[key] = node;
-    } else if (firstElem.type === 'Array') {
-      const node = {
-        name: firstElem.name,
-        valueOld: firstElem.value,
-        valueNew: null,
-        status: 'notChanged',
-        parent,
-      };
-      result[key] = node;
     } else if (firstElem.value === secondElem.value) {
       const node = {
         name: firstElem.name,
         valueOld: firstElem.value,
-        valueNew: null,
         status: 'notChanged',
         parent,
       };
 
       result[key] = node;
     } else if (firstElem.value !== secondElem.value) {
-      const children = firstElem.children || secondElem.children;
+      const children = { children: firstElem.children || secondElem.children };
+      const hasChildren = hasObjectKey(firstElem, 'children') || hasObjectKey(secondElem, 'children');
+
+      const valueOld = { valueOld: firstElem.value };
+      const hasValueOld = hasObjectKey(firstElem, 'value');
+
+      const valueNew = { valueNew: secondElem.value };
+      const hasValueNew = hasObjectKey(secondElem, 'value');
+
       const node = {
         name: firstElem.name,
-        valueOld: firstElem.value,
-        valueNew: secondElem.value,
+        ...(hasValueOld && valueOld),
+        ...(hasValueNew && valueNew),
         status: 'changed',
-        children,
+        ...(hasChildren && children),
         parent,
       };
       result[key] = node;

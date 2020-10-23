@@ -12,7 +12,6 @@ const buildAST = (obj) => {
         ...acc,
         [key]: {
           name: key,
-          type,
           children,
         },
       };
@@ -22,7 +21,6 @@ const buildAST = (obj) => {
       ...acc,
       [key]: {
         name: key,
-        type,
         value,
       },
     };
