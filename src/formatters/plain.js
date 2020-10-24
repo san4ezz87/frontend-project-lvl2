@@ -1,34 +1,38 @@
 const chandedStatuses = ['changed', 'deleted', 'added'];
 
 const plain = (tree) => {
-  const iter = (treeIn, accum) => {
+  const iter = (treeIn, accum, path) => {
     const nodes = Object.values(treeIn).sort();
     const nodesChanged = nodes.reduce((acc, node) => {
-      if (chandedStatuses.includes(node.status)) {
-        return [...acc, node];
+      const nodeWithPath = {
+        ...node,
+        path: [...path],
+      };
+
+      if (chandedStatuses.includes(nodeWithPath.state)) {
+        return [...acc, nodeWithPath];
       }
 
-      if (node.children) {
-        return [...acc, ...iter(node.children, [])];
+      if (nodeWithPath.children) {
+        return [...acc, ...iter(nodeWithPath.children, [], [...path, nodeWithPath.name])];
       }
       return [...acc];
     }, accum);
     return nodesChanged;
   };
-  const filteredNodes = iter(tree, []);
+  const filteredNodes = iter(tree, [], []);
 
   const result = filteredNodes.map((node) => {
-    const path = [...node.parent, node.name].join('.');
-
+    const path = [...node.path, node.name].join('.');
     const valueOldTyped = typeof node.valueOld === 'string' ? `'${node.valueOld}'` : node.valueOld;
     const valueNewTyped = typeof node.valueNew === 'string' ? `'${node.valueNew}'` : node.valueNew;
 
-    if (node.status === 'added') {
+    if (node.state === 'added') {
       const value = node.children ? '[complex value]' : valueNewTyped;
       return `Property '${path}' was added with value: ${value}`;
     }
 
-    if (node.status === 'deleted') {
+    if (node.state === 'deleted') {
       return `Property '${path}' was removed`;
     }
 

@@ -1,259 +1,148 @@
 {
   "common": {
     "name": "common",
-    "typeOld": "Object",
-    "typeNew": null,
-    "valueOld": {
+    "state": "notChanged",
+    "children": {
       "follow": {
         "name": "follow",
-        "typeOld": null,
-        "typeNew": "Boolean",
-        "valueOld": null,
         "valueNew": false,
-        "status": "added",
-        "parent": [
-          "common"
-        ]
+        "state": "added"
       },
       "setting1": {
         "name": "setting1",
-        "typeOld": "String",
-        "typeNew": null,
         "valueOld": "Value 1",
-        "valueNew": null,
-        "status": "notChanged",
-        "parent": [
-          "common"
-        ]
+        "state": "notChanged"
       },
       "setting2": {
         "name": "setting2",
-        "typeOld": "Number",
-        "typeNew": null,
         "valueOld": 200,
-        "valueNew": null,
-        "status": "deleted",
-        "parent": [
-          "common"
-        ]
+        "state": "deleted"
       },
       "setting3": {
         "name": "setting3",
-        "typeOld": "Boolean",
-        "typeNew": "Object",
         "valueOld": true,
-        "valueNew": {
+        "state": "changed",
+        "children": {
           "key": {
             "name": "key",
-            "type": "String",
             "value": "value"
           }
-        },
-        "status": "changed",
-        "parent": [
-          "common"
-        ]
+        }
       },
       "setting4": {
         "name": "setting4",
-        "typeOld": null,
-        "typeNew": "String",
-        "valueOld": null,
         "valueNew": "blah blah",
-        "status": "added",
-        "parent": [
-          "common"
-        ]
+        "state": "added"
       },
       "setting5": {
         "name": "setting5",
-        "typeOld": null,
-        "typeNew": "Object",
-        "valueOld": null,
-        "valueNew": {
+        "state": "added",
+        "children": {
           "key5": {
             "name": "key5",
-            "type": "String",
             "value": "value5"
           }
-        },
-        "status": "added",
-        "parent": [
-          "common"
-        ]
+        }
       },
       "setting6": {
         "name": "setting6",
-        "typeOld": "Object",
-        "typeNew": null,
-        "valueOld": {
+        "state": "notChanged",
+        "children": {
           "doge": {
             "name": "doge",
-            "typeOld": "Object",
-            "typeNew": null,
-            "valueOld": {
+            "state": "notChanged",
+            "children": {
               "wow": {
                 "name": "wow",
-                "typeOld": "String",
-                "typeNew": "String",
                 "valueOld": "too much",
                 "valueNew": "so much",
-                "status": "changed",
-                "parent": [
-                  "common",
-                  "setting6",
-                  "doge"
-                ]
+                "state": "changed"
               }
-            },
-            "valueNew": null,
-            "status": "notChanged",
-            "parent": [
-              "common",
-              "setting6"
-            ]
+            }
           },
           "key": {
             "name": "key",
-            "typeOld": "String",
-            "typeNew": null,
             "valueOld": "value",
-            "valueNew": null,
-            "status": "notChanged",
-            "parent": [
-              "common",
-              "setting6"
-            ]
+            "state": "notChanged"
           },
           "ops": {
             "name": "ops",
-            "typeOld": null,
-            "typeNew": "String",
-            "valueOld": null,
             "valueNew": "vops",
-            "status": "added",
-            "parent": [
-              "common",
-              "setting6"
-            ]
+            "state": "added"
           }
-        },
-        "valueNew": null,
-        "status": "notChanged",
-        "parent": [
-          "common"
-        ]
+        }
       }
-    },
-    "valueNew": null,
-    "status": "notChanged",
-    "parent": []
+    }
   },
   "group1": {
     "name": "group1",
-    "typeOld": "Object",
-    "typeNew": null,
-    "valueOld": {
+    "state": "notChanged",
+    "children": {
       "baz": {
         "name": "baz",
-        "typeOld": "String",
-        "typeNew": "String",
         "valueOld": "bas",
         "valueNew": "bars",
-        "status": "changed",
-        "parent": [
-          "group1"
-        ]
+        "state": "changed"
       },
       "foo": {
         "name": "foo",
-        "typeOld": "String",
-        "typeNew": null,
         "valueOld": "bar",
-        "valueNew": null,
-        "status": "notChanged",
-        "parent": [
-          "group1"
-        ]
+        "state": "notChanged"
       },
       "nest": {
         "name": "nest",
-        "typeOld": "Object",
-        "typeNew": "String",
-        "valueOld": {
+        "valueNew": "str",
+        "state": "changed",
+        "children": {
           "key": {
             "name": "key",
-            "type": "String",
             "value": "value"
           }
-        },
-        "valueNew": "str",
-        "status": "changed",
-        "parent": [
-          "group1"
-        ]
+        }
       }
-    },
-    "valueNew": null,
-    "status": "notChanged",
-    "parent": []
+    }
   },
   "group2": {
     "name": "group2",
-    "typeOld": "Object",
-    "typeNew": null,
-    "valueOld": {
+    "state": "deleted",
+    "children": {
       "abc": {
         "name": "abc",
-        "type": "Number",
         "value": 12345
       },
       "deep": {
         "name": "deep",
-        "type": "Object",
-        "value": {
+        "children": {
           "id": {
             "name": "id",
-            "type": "Number",
             "value": 45
           }
         }
       }
-    },
-    "valueNew": null,
-    "status": "deleted",
-    "parent": []
+    }
   },
   "group3": {
     "name": "group3",
-    "typeOld": null,
-    "typeNew": "Object",
-    "valueOld": null,
-    "valueNew": {
+    "state": "added",
+    "children": {
       "fee": {
         "name": "fee",
-        "type": "Number",
         "value": 100500
       },
       "deep": {
         "name": "deep",
-        "type": "Object",
-        "value": {
+        "children": {
           "id": {
             "name": "id",
-            "type": "Object",
-            "value": {
+            "children": {
               "number": {
                 "name": "number",
-                "type": "Number",
                 "value": 45
               }
             }
           }
         }
       }
-    },
-    "status": "added",
-    "parent": []
+    }
   }
 }

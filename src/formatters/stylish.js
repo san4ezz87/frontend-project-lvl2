@@ -16,21 +16,21 @@ const stylish = (tree) => {
       const hasValueNew = hasObjectKey(node, 'valueNew');
       const hasValueOld = hasObjectKey(node, 'valueOld');
 
-      if (node.status === 'deleted') {
+      if (node.state === 'deleted') {
         if (hasChildren) {
-          return `${indention}${signsMap[node.status]}${node.name}: {\n${iter(node.children, indentionCount + 2)}\n  ${indention}}`;
+          return `${indention}${signsMap[node.state]}${node.name}: {\n${iter(node.children, indentionCount + 2)}\n  ${indention}}`;
         }
         return `${indention}${signsMap.deleted}${node.name}: ${node.valueOld}`;
       }
 
-      if (node.status === 'added') {
+      if (node.state === 'added') {
         if (hasChildren) {
-          return `${indention}${signsMap[node.status]}${node.name}: {\n${iter(node.children, indentionCount + 2)}\n  ${indention}}`;
+          return `${indention}${signsMap[node.state]}${node.name}: {\n${iter(node.children, indentionCount + 2)}\n  ${indention}}`;
         }
         return `${indention}${signsMap.added}${node.name}: ${node.valueNew}`;
       }
 
-      if (node.status === 'changed') {
+      if (node.state === 'changed') {
         if (hasChildren && hasValueOld) {
           const changed = [];
           changed.push(`${indention}${signsMap.deleted}${node.name}: ${node.valueOld}`);
@@ -51,14 +51,14 @@ const stylish = (tree) => {
         return changed.join('\n');
       }
 
-      if (node.status === 'notChanged' || !node.status) {
+      if (node.state === 'notChanged' || !node.state) {
         if (hasChildren) {
-          return `${indention}${signsMap[node.status]}${node.name}: {\n${iter(node.children, indentionCount + 2)}\n  ${indention}}`;
+          return `${indention}${signsMap[node.state]}${node.name}: {\n${iter(node.children, indentionCount + 2)}\n  ${indention}}`;
         }
-        return `${indention}${signsMap[node.status]}${node.name}: ${node.valueOld || node.value}`;
+        return `${indention}${signsMap[node.state]}${node.name}: ${node.valueOld || node.value}`;
       }
 
-      return `${indention}${signsMap[node.status]}${node.name}: ${node.value}`;
+      return `${indention}${signsMap[node.state]}${node.name}: ${node.value}`;
     }).join('\n');
     return res;
   };

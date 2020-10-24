@@ -24,7 +24,7 @@ test.each([
 test.each([
   ['defaul', 'resultNestedStylish.txt'],
   ['plain', 'resultNestedPlain.txt'],
-  // ['json', 'resultNestedJson.json'],
+  ['json', 'resultNestedJson.json'],
 ])('compare two recursive obj with %s formater', (formaterType, fixtureFile) => {
   const pathOne = getFixturePath('fileOneNested.json');
   const pathTwo = getFixturePath('fileTwoNested.json');

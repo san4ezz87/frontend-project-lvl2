@@ -1,6 +1,6 @@
 import hasObjectKey from '../utils/hasObjectKey.js';
 
-const buildDiffAst = (first, second, parent) => {
+const buildDiffAst = (first, second) => {
   const commonObj = {
     ...first,
     ...second,
@@ -18,9 +18,8 @@ const buildDiffAst = (first, second, parent) => {
       const node = {
         name: secondElem.name,
         valueNew: secondElem.value,
-        status: 'added',
+        state: 'added',
         ...(hasChildren && children),
-        parent,
       };
       result[key] = node;
     } else if (hasObjectKey(first, key) && !hasObjectKey(second, key)) {
@@ -30,30 +29,26 @@ const buildDiffAst = (first, second, parent) => {
       const node = {
         name: firstElem.name,
         valueOld: firstElem.value,
-        status: 'deleted',
+        state: 'deleted',
         ...(hasChildren && children),
-        parent,
       };
       result[key] = node;
     } else if (hasObjectKey(firstElem, 'children') && hasObjectKey(secondElem, 'children')) {
       const children = buildDiffAst(
         firstElem.children,
         secondElem.children,
-        [...parent, firstElem.name],
       );
       const node = {
         name: firstElem.name,
-        status: 'notChanged',
+        state: 'notChanged',
         children,
-        parent,
       };
       result[key] = node;
     } else if (firstElem.value === secondElem.value) {
       const node = {
         name: firstElem.name,
         valueOld: firstElem.value,
-        status: 'notChanged',
-        parent,
+        state: 'notChanged',
       };
 
       result[key] = node;
@@ -71,9 +66,8 @@ const buildDiffAst = (first, second, parent) => {
         name: firstElem.name,
         ...(hasValueOld && valueOld),
         ...(hasValueNew && valueNew),
-        status: 'changed',
+        state: 'changed',
         ...(hasChildren && children),
-        parent,
       };
       result[key] = node;
     }
