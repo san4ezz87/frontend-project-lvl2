@@ -2,18 +2,19 @@ import yaml from 'js-yaml';
 import ini from 'ini';
 
 const parseFileToJsObject = (file) => {
-  if (file.ext === '.json') {
-    return JSON.parse(file.data);
-  }
+  switch (file.ext) {
+    case '.json':
+      return JSON.parse(file.data);
 
-  if (file.ext === '.yml') {
-    return yaml.safeLoad(file.data);
-  }
+    case '.yml':
+      return yaml.safeLoad(file.data);
 
-  if (file.ext === '.ini') {
-    return ini.parse(file.data);
+    case '.ini':
+      return ini.parse(file.data);
+
+    default:
+      return {};
   }
-  return {};
 };
 
 export default parseFileToJsObject;
