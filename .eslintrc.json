@@ -11,6 +11,8 @@
     },
     "rules": {
       "semi": "error",
-      "import/extensions": 0
+      "import/extensions": 0,
+      "no-console": "off",
+      "no-underscore-dangle":  ["error", { "allow": ["__filename", "__dirname"] }]
     }
 }

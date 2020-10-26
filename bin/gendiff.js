@@ -14,7 +14,6 @@ program.version('0.0.1', '-v, --vers', 'output the current version')
     const formater = program.format;
 
     const result = genDiff(pathOne, pathTwo, formater);
-    // eslint-disable-next-line no-console
     console.log(result);
   });
 
