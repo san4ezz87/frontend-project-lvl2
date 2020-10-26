@@ -30,5 +30,5 @@ test.each([
   const pathTwo = getFixturePath('fileTwoNested.json');
 
   const expected = readFile(getFixturePath(fixtureFile));
-  expect(genDiff(pathOne, pathTwo, formaterType)).toBe(expected.data);
+  expect(genDiff(pathOne, pathTwo, formaterType)).toBe(expected.value);
 });

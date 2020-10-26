@@ -4,22 +4,22 @@ import path from 'path';
 function readFile(pathString) {
   const compoosedPath = path.resolve(process.cwd(), pathString);
   const fileUrl = new URL(`file://${compoosedPath}`);
-  let data;
-  const ext = path.extname(pathString);
+  let value;
+  const type = path.extname(pathString);
 
   try {
-    data = fs.readFileSync(fileUrl, 'utf8');
+    value = fs.readFileSync(fileUrl, 'utf8');
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log('cant read file', e);
     return {
-      ext,
-      data: '{}',
+      type,
+      value: '{}',
     };
   }
   return {
-    ext,
-    data,
+    type,
+    value,
   };
 }
 
