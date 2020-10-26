@@ -4,8 +4,7 @@ import buildAST from './buildAST.js';
 const buildDiffAst = (firstObj, secondObj) => {
   const firstAst = buildAST(firstObj);
   const secondTwoAst = buildAST(secondObj);
-  const diff = compareAst(firstAst, secondTwoAst);
-  return diff;
+  return compareAst(firstAst, secondTwoAst);
 };
 
 export default buildDiffAst;

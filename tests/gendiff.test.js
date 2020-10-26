@@ -1,5 +1,5 @@
 import genDiff from '../src/gendiff.js';
-import readFile from '../utils/readFile.js';
+import { readFile } from '../utils/utils.js';
 import getFixturePath from '../utils/getFixturePath.js';
 
 const result = `{
@@ -30,5 +30,5 @@ test.each([
   const pathTwo = getFixturePath('fileTwoNested.json');
 
   const expected = readFile(getFixturePath(fixtureFile));
-  expect(genDiff(pathOne, pathTwo, formaterType)).toBe(expected.value);
+  expect(genDiff(pathOne, pathTwo, formaterType)).toBe(expected);
 });

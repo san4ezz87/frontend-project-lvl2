@@ -1,16 +1,16 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const parse = (data) => {
-  switch (data.type) {
-    case '.json':
-      return JSON.parse(data.value);
+const parse = (data, type) => {
+  switch (type) {
+    case 'json':
+      return JSON.parse(data);
 
-    case '.yml':
-      return yaml.safeLoad(data.value);
+    case 'yml':
+      return yaml.safeLoad(data);
 
-    case '.ini':
-      return ini.parse(data.value);
+    case 'ini':
+      return ini.parse(data);
 
     default:
       return {};
