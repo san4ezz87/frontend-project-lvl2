@@ -1,4 +1,5 @@
-import hasObjectKey from '../../utils/hasObjectKey.js';
+// import hasObjectKey from '../../utils/hasObjectKey.js';
+import has from 'lodash/has';
 
 const signsMap = {
   deleted: '- ',
@@ -12,9 +13,9 @@ const stylish = (tree) => {
     const values = Object.values(treeIn).sort();
     const indention = '  '.repeat(indentionCount);
     const res = values.map((node) => {
-      const hasChildren = hasObjectKey(node, 'children');
-      const hasValueNew = hasObjectKey(node, 'valueNew');
-      const hasValueOld = hasObjectKey(node, 'valueOld');
+      const hasChildren = has(node, 'children');
+      const hasValueNew = has(node, 'valueNew');
+      const hasValueOld = has(node, 'valueOld');
 
       if (node.state === 'deleted') {
         if (hasChildren) {

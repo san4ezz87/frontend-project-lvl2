@@ -1,4 +1,4 @@
-import hasObjectKey from '../utils/hasObjectKey.js';
+import has from 'lodash/has';
 
 const compareAst = (first, second) => {
   const commonObj = {
@@ -10,10 +10,9 @@ const compareAst = (first, second) => {
   commonKeys.forEach((key) => {
     const firstElem = first[key];
     const secondElem = second[key];
-
-    if (!hasObjectKey(first, key) && hasObjectKey(second, key)) {
+    if (!has(first, key) && has(second, key)) {
       const children = { children: secondElem.children };
-      const hasChildren = hasObjectKey(secondElem, 'children');
+      const hasChildren = has(secondElem, 'children');
 
       const node = {
         name: secondElem.name,
@@ -22,9 +21,9 @@ const compareAst = (first, second) => {
         ...(hasChildren && children),
       };
       result[key] = node;
-    } else if (hasObjectKey(first, key) && !hasObjectKey(second, key)) {
+    } else if (has(first, key) && !has(second, key)) {
       const children = { children: firstElem.children };
-      const hasChildren = hasObjectKey(firstElem, 'children');
+      const hasChildren = has(firstElem, 'children');
 
       const node = {
         name: firstElem.name,
@@ -33,7 +32,7 @@ const compareAst = (first, second) => {
         ...(hasChildren && children),
       };
       result[key] = node;
-    } else if (hasObjectKey(firstElem, 'children') && hasObjectKey(secondElem, 'children')) {
+    } else if (has(firstElem, 'children') && has(secondElem, 'children')) {
       const children = compareAst(
         firstElem.children,
         secondElem.children,
@@ -54,13 +53,13 @@ const compareAst = (first, second) => {
       result[key] = node;
     } else if (firstElem.value !== secondElem.value) {
       const children = { children: firstElem.children || secondElem.children };
-      const hasChildren = hasObjectKey(firstElem, 'children') || hasObjectKey(secondElem, 'children');
+      const hasChildren = has(firstElem, 'children') || has(secondElem, 'children');
 
       const valueOld = { valueOld: firstElem.value };
-      const hasValueOld = hasObjectKey(firstElem, 'value');
+      const hasValueOld = has(firstElem, 'value');
 
       const valueNew = { valueNew: secondElem.value };
-      const hasValueNew = hasObjectKey(secondElem, 'value');
+      const hasValueNew = has(secondElem, 'value');
 
       const node = {
         name: firstElem.name,

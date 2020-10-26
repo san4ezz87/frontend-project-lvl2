@@ -1,12 +1,11 @@
-import getTypeOf from '../utils/getTypeOf.js';
+import isPlainObject from 'lodash/isPlainObject';
 
 const buildAST = (obj) => {
   const keys = Object.keys(obj);
   return keys.reduce((acc, key) => {
     const value = obj[key];
-    const type = getTypeOf(value);
 
-    if (type === 'Object') {
+    if (isPlainObject(value)) {
       const children = buildAST(value);
       return {
         ...acc,
