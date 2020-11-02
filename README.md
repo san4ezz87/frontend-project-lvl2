@@ -4,23 +4,13 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/69bb30cc846a15ac8c0b/maintainability)](https://codeclimate.com/github/san4ezz87/frontend-project-lvl2/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/69bb30cc846a15ac8c0b/test_coverage)](https://codeclimate.com/github/san4ezz87/frontend-project-lvl2/test_coverage) [![](https://github.com/san4ezz87/frontend-project-lvl2/workflows/Node.js%20CI/badge.svg)](https://github.com/san4ezz87/frontend-project-lvl2/actions)
 
-### Утилита для сравнения конфигурационных файлов
+### Консольная утилита для сравнения конфигурационных файлов
 
-Может работать как
-  * консольная утилита
-  * как модуль
+### Установка
 
-
- #### Установка 
-  
-  ```bash
+```bash
   npm i frontend-project-lvl2-by-alex-smirnov
-  ```
-
-  #### Подключение как модуль
-  ```js
-    import genDiff from 'gendiff';
-  ```
+```
 
 
 ### Примеры использования консольной утилиты
