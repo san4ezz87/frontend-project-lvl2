@@ -1,6 +1,6 @@
 {
   "name": "frontend-project-lvl2-by-alex-smirnov",
-  "version": "0.0.",
+  "version": "0.0.6",
   "description": "",
   "main": "index.js",
   "type": "module",
@@ -8,9 +8,9 @@
     "gendiff": "bin/gendiff.js"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest",
-    "test-watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll",
-    "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
+    "test": "npx -n '--experimental-vm-modules  --no-warnings' jest",
+    "test-watch": "npx -n '--experimental-vm-modules  --no-warnings' jest --watchAll",
+    "coverage": "npx -n '--experimental-vm-modules  --no-warnings' jest --coverage"
   },
   "jest": {
     "verbose": true,
