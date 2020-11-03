@@ -12,8 +12,10 @@
   npm i frontend-project-lvl2-by-alex-smirnov
 ```
 
+### Для сравнения файлов нужно передать как относительный ```../somefile```  так и абсолютный ```/somedir/somefile``` пути.
 
 ### Примеры использования консольной утилиты
+  нужно передать путь до файла как  относительный так и абсолютный
 
 ### JSON
 [![asciicast](https://asciinema.org/a/enAfaro6OhcDEEfLHosuDaLBY.svg)](https://asciinema.org/a/enAfaro6OhcDEEfLHosuDaLBY)
