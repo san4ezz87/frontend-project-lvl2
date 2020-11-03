@@ -3,13 +3,13 @@ import { readFile } from '../utils/utils.js';
 import getFixturePath from '../utils/getFixturePath.js';
 
 test.each([
-  ['ini'],
-  ['yml'],
-])('different formats of files, ini, yml with stylish formatter', (extansion) => {
+  ['ini', 'resultPlainStylish.txt'],
+  ['yml', 'resultPlainStylish.txt'],
+])('different formats of files, ini, yml with stylish formatter', (extansion, resultFile) => {
   const pathOne = getFixturePath(`file1.${extansion}`);
   const pathTwo = getFixturePath(`file2.${extansion}`);
 
-  const expected = readFile(getFixturePath('resultPlainStylish.txt'));
+  const expected = readFile(getFixturePath(resultFile));
 
   expect(genDiff(pathOne, pathTwo, '')).toBe(expected);
 });
