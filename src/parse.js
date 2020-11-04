@@ -1,5 +1,5 @@
 import yaml from 'js-yaml';
-import ini from 'ini';
+import { parseIni } from '../utils/utils.js';
 
 const parse = (data, type) => {
   switch (type) {
@@ -10,7 +10,7 @@ const parse = (data, type) => {
       return yaml.safeLoad(data);
 
     case 'ini':
-      return ini.parse(data);
+      return parseIni(data);
 
     default:
       return {};

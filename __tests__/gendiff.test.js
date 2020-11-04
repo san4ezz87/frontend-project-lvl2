@@ -8,21 +8,11 @@ test.each(formats)('different formats of files %s with stylish formatter', (form
   const pathOne = getFixturePath(`file1.${format}`);
   const pathTwo = getFixturePath(`file2.${format}`);
 
-  const expected = readFile(getFixturePath('resultPlainStylish.txt'));
+  const resultStylish = readFile(getFixturePath('resultStylish.txt'));
+  const resultPlain = readFile(getFixturePath('resultPlain.txt'));
+  const resultJson = readFile(getFixturePath('result.json'));
 
-  expect(genDiff(pathOne, pathTwo, '')).toBe(expected);
-});
-
-const formatersTypes = [
-  ['defaul', 'resultNestedStylish.txt'],
-  ['plain', 'resultNestedPlain.txt'],
-  ['json', 'resultNestedJson.json'],
-];
-
-test.each(formatersTypes)('compare two recursive obj with %s formater', (formaterType, fixtureFile) => {
-  const pathOne = getFixturePath('fileOneNested.json');
-  const pathTwo = getFixturePath('fileTwoNested.json');
-
-  const expected = readFile(getFixturePath(fixtureFile));
-  expect(genDiff(pathOne, pathTwo, formaterType)).toBe(expected);
+  expect(genDiff(pathOne, pathTwo, '')).toBe(resultStylish);
+  expect(genDiff(pathOne, pathTwo, 'plain')).toBe(resultPlain);
+  expect(genDiff(pathOne, pathTwo, 'json')).toBe(resultJson);
 });

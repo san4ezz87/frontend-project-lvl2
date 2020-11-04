@@ -21,13 +21,8 @@
       "setting3": {
         "name": "setting3",
         "valueOld": true,
-        "state": "changed",
-        "children": {
-          "key": {
-            "name": "key",
-            "value": "value"
-          }
-        }
+        "valueNew": null,
+        "state": "changed"
       },
       "setting4": {
         "name": "setting4",
@@ -54,7 +49,7 @@
             "children": {
               "wow": {
                 "name": "wow",
-                "valueOld": "too much",
+                "valueOld": "",
                 "valueNew": "so much",
                 "state": "changed"
               }
