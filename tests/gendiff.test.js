@@ -2,23 +2,24 @@ import genDiff from '../src/gendiff.js';
 import { readFile } from '../utils/utils.js';
 import getFixturePath from '../utils/getFixturePath.js';
 
-test.each([
-  ['ini', 'resultPlainStylish.txt'],
-  ['yml', 'resultPlainStylish.txt'],
-])('different formats of files, ini, yml with stylish formatter', (extansion, resultFile) => {
-  const pathOne = getFixturePath(`file1.${extansion}`);
-  const pathTwo = getFixturePath(`file2.${extansion}`);
+const formats = ['ini', 'yml'];
 
-  const expected = readFile(getFixturePath(resultFile));
+test.each(formats)('different formats of files %s with stylish formatter', (format) => {
+  const pathOne = getFixturePath(`file1.${format}`);
+  const pathTwo = getFixturePath(`file2.${format}`);
+
+  const expected = readFile(getFixturePath('resultPlainStylish.txt'));
 
   expect(genDiff(pathOne, pathTwo, '')).toBe(expected);
 });
 
-test.each([
+const formatersTypes = [
   ['defaul', 'resultNestedStylish.txt'],
   ['plain', 'resultNestedPlain.txt'],
   ['json', 'resultNestedJson.json'],
-])('compare two recursive obj with %s formater', (formaterType, fixtureFile) => {
+];
+
+test.each(formatersTypes)('compare two recursive obj with %s formater', (formaterType, fixtureFile) => {
   const pathOne = getFixturePath('fileOneNested.json');
   const pathTwo = getFixturePath('fileTwoNested.json');
 
