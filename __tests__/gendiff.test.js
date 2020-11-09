@@ -15,6 +15,6 @@ test.each(formats)('different formats of files %s with stylish formatter', (form
   const resultJson = readFile(getFixturePath('result.json'));
 
   expect(genDiff(pathOne, pathTwo)).toBe(resultStylish);
-  expect(genDiff(pathOne, pathTwo, 'plaine')).toBe(resultPlain);
+  expect(genDiff(pathOne, pathTwo, 'plain')).toBe(resultPlain);
   expect(genDiff(pathOne, pathTwo, 'json')).toBe(resultJson);
 });
