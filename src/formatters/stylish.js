@@ -1,5 +1,5 @@
 // import hasObjectKey from '../../utils/hasObjectKey.js';
-import has from 'lodash/has';
+import has from 'lodash/has.js';
 
 const signsMap = {
   deleted: '- ',

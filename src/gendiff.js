@@ -4,19 +4,23 @@ import { readFile, getDataFormat } from '../utils/utils.js';
 import getFormater from './formatters/index.js';
 
 const genDiff = (firstPath, secondPath, formaterType) => {
-  const first = readFile(firstPath);
-  const second = readFile(secondPath);
+  try {
+    const first = readFile(firstPath);
+    const second = readFile(secondPath);
 
-  const format = getFormater(formaterType);
+    const format = getFormater(formaterType);
 
-  const firstType = getDataFormat(firstPath);
-  const secondType = getDataFormat(secondPath);
+    const firstType = getDataFormat(firstPath);
+    const secondType = getDataFormat(secondPath);
 
-  const firstObj = parse(first, firstType);
-  const secondObj = parse(second, secondType);
+    const firstObj = parse(first, firstType);
+    const secondObj = parse(second, secondType);
 
-  const ast = buildDiffAst(firstObj, secondObj);
-  return format(ast);
+    const ast = buildDiffAst(firstObj, secondObj);
+    return format(ast);
+  } catch (e) {
+    console.error(e.message);
+  }
 };
 
 export default genDiff;

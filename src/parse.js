@@ -1,8 +1,8 @@
 import yaml from 'js-yaml';
 import { parseIni } from '../utils/utils.js';
 
-const parse = (data, type) => {
-  switch (type) {
+const parse = (data, format) => {
+  switch (format) {
     case 'json':
       return JSON.parse(data);
 
@@ -13,7 +13,7 @@ const parse = (data, type) => {
       return parseIni(data);
 
     default:
-      return {};
+      throw new Error('не верынй формат файла');
   }
 };
 

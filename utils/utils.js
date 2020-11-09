@@ -3,16 +3,17 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import ini from 'ini';
-import isObjectLike from 'lodash/isObjectLike';
-import mapValues from 'lodash/mapValues';
-import isNaN from 'lodash/isNaN';
+import isObjectLike from 'lodash/isObjectLike.js';
+import mapValues from 'lodash/mapValues.js';
+import isNaN from 'lodash/isNaN.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
-export const getDataFormat = (pathString) => path.extname(pathString).split('.').slice(1)[0];
+// не могу использовать просто path потому что это имя уже испоьзуется
+export const getDataFormat = (filePath) => path.extname(filePath).slice(1);
 
 export const readFile = (pathString) => {
   const compoosedPath = path.resolve(process.cwd(), pathString);

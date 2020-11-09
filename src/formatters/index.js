@@ -6,13 +6,15 @@ const formaters = {
   plain,
   json,
   stylish,
-  default: stylish,
 };
 
-const getFormater = (type) => {
-  const formater = formaters[type];
+const getFormater = (format = 'stylish') => {
+  const formater = formaters[format];
+  if (typeof formater === 'function') {
+    return formater;
+  }
 
-  return formater || stylish;
+  throw new Error('не верное имя форматера');
 };
 
 export default getFormater;

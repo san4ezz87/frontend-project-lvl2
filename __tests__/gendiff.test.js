@@ -1,6 +1,8 @@
 import genDiff from '../src/gendiff.js';
-import { readFile } from '../utils/utils.js';
-import getFixturePath from '../utils/getFixturePath.js';
+import {
+  readFile,
+  getFixturePath,
+} from '../utils/utils.js';
 
 const formats = ['ini', 'yml'];
 
@@ -12,7 +14,7 @@ test.each(formats)('different formats of files %s with stylish formatter', (form
   const resultPlain = readFile(getFixturePath('resultPlain.txt'));
   const resultJson = readFile(getFixturePath('result.json'));
 
-  expect(genDiff(pathOne, pathTwo, '')).toBe(resultStylish);
-  expect(genDiff(pathOne, pathTwo, 'plain')).toBe(resultPlain);
+  expect(genDiff(pathOne, pathTwo)).toBe(resultStylish);
+  expect(genDiff(pathOne, pathTwo, 'plaine')).toBe(resultPlain);
   expect(genDiff(pathOne, pathTwo, 'json')).toBe(resultJson);
 });
