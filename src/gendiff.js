@@ -20,6 +20,7 @@ const genDiff = (firstPath, secondPath, formaterType) => {
     return format(ast);
   } catch (e) {
     console.error(e.message);
+    return '';
   }
 };
 
