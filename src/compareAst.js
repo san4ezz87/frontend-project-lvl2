@@ -1,76 +1,57 @@
 import has from 'lodash/has.js';
+import isPlainObject from 'lodash/isPlainObject.js';
+import union from 'lodash/union.js';
+import sortBy from 'lodash/sortBy';
+
+const createNode = (name, state, valueNew, valueOld, children) => ({
+  ...(name !== undefined && { name }),
+  ...(state !== undefined && { state }),
+  ...(valueNew !== undefined && { valueNew }),
+  ...(valueOld !== undefined && { valueOld }),
+  ...(children !== undefined && { children }),
+});
 
 const compareAst = (first, second) => {
-  const commonObj = {
-    ...first,
-    ...second,
-  };
-  const commonKeys = Object.keys(commonObj).sort();
-  const result = {};
-  commonKeys.forEach((key) => {
+  const keys = union(Object.keys(first), Object.keys(second));
+  const sortedKyes = sortBy(keys);
+
+  const result = sortedKyes.reduce((acc, key) => {
     const firstElem = first[key];
     const secondElem = second[key];
+
     if (!has(first, key) && has(second, key)) {
-      const children = { children: secondElem.children };
-      const hasChildren = has(secondElem, 'children');
-
-      const node = {
-        name: secondElem.name,
-        valueNew: secondElem.value,
-        state: 'added',
-        ...(hasChildren && children),
+      return {
+        ...acc,
+        [key]: createNode(key, 'added', secondElem, undefined, undefined),
       };
-      result[key] = node;
-    } else if (has(first, key) && !has(second, key)) {
-      const children = { children: firstElem.children };
-      const hasChildren = has(firstElem, 'children');
-
-      const node = {
-        name: firstElem.name,
-        valueOld: firstElem.value,
-        state: 'deleted',
-        ...(hasChildren && children),
-      };
-      result[key] = node;
-    } else if (has(firstElem, 'children') && has(secondElem, 'children')) {
-      const children = compareAst(
-        firstElem.children,
-        secondElem.children,
-      );
-      const node = {
-        name: firstElem.name,
-        state: 'notChanged',
-        children,
-      };
-      result[key] = node;
-    } else if (firstElem.value === secondElem.value) {
-      const node = {
-        name: firstElem.name,
-        valueOld: firstElem.value,
-        state: 'notChanged',
-      };
-
-      result[key] = node;
-    } else if (firstElem.value !== secondElem.value) {
-      const children = { children: firstElem.children || secondElem.children };
-      const hasChildren = has(firstElem, 'children') || has(secondElem, 'children');
-
-      const valueOld = { valueOld: firstElem.value };
-      const hasValueOld = has(firstElem, 'value');
-
-      const valueNew = { valueNew: secondElem.value };
-      const hasValueNew = has(secondElem, 'value');
-
-      const node = {
-        name: firstElem.name,
-        ...(hasValueOld && valueOld),
-        ...(hasValueNew && valueNew),
-        state: 'changed',
-        ...(hasChildren && children),
-      };
-      result[key] = node;
     }
-  });
+    if (has(first, key) && !has(second, key)) {
+      return {
+        ...acc,
+        [key]: createNode(key, 'deleted', undefined, firstElem, undefined),
+      };
+    }
+    if (isPlainObject(firstElem) && isPlainObject(secondElem)) {
+      const children = compareAst(
+        firstElem,
+        secondElem,
+      );
+      return {
+        ...acc,
+        [key]: createNode(key, 'depth', undefined, undefined, children),
+      };
+    }
+    if (firstElem !== secondElem) {
+      return {
+        ...acc,
+        [key]: createNode(key, 'changed', secondElem, firstElem, undefined),
+      };
+    }
+    return {
+      ...acc,
+      [key]: createNode(key, 'notChanged', undefined, firstElem, undefined),
+    };
+  }, {});
   return result;
 };
 

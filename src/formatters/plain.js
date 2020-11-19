@@ -1,3 +1,5 @@
+import isPlainObject from 'lodash/isPlainObject.js';
+
 const chandedStatuses = ['changed', 'deleted', 'added'];
 
 const plain = (tree) => {
@@ -28,7 +30,7 @@ const plain = (tree) => {
     const valueNewTyped = typeof node.valueNew === 'string' ? `'${node.valueNew}'` : node.valueNew;
 
     if (node.state === 'added') {
-      const value = node.children ? '[complex value]' : valueNewTyped;
+      const value = isPlainObject(node.valueNew) ? '[complex value]' : valueNewTyped;
       return `Property '${path}' was added with value: ${value}`;
     }
 
@@ -36,15 +38,10 @@ const plain = (tree) => {
       return `Property '${path}' was removed`;
     }
 
-    if (node.children && node.valueOld) {
-      return `Property '${path}' was updated. From ${valueOldTyped} to [complex value]`;
-    }
+    const valueOldFinished = isPlainObject(valueOldTyped) ? '[complex value]' : valueOldTyped;
+    const valueNewFinished = isPlainObject(valueNewTyped) ? '[complex value]' : valueNewTyped;
 
-    if (node.children && node.valueNew) {
-      return `Property '${path}' was updated. From [complex value] to ${valueNewTyped}`;
-    }
-
-    return `Property '${path}' was updated. From ${valueOldTyped} to ${valueNewTyped}`;
+    return `Property '${path}' was updated. From ${valueOldFinished} to ${valueNewFinished}`;
   });
 
   return result.join('\n');

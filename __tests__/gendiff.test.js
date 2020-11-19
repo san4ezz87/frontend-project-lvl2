@@ -4,17 +4,17 @@ import {
   getFixturePath,
 } from '../utils/utils.js';
 
-const formats = ['ini', 'yml'];
+const formats = ['json', 'ini', 'yml'];
 
-test.each(formats)('different formats of files %s with stylish formatter', (format) => {
+test.each(formats)('different formats of files %s', (format) => {
   const pathOne = getFixturePath(`file1.${format}`);
   const pathTwo = getFixturePath(`file2.${format}`);
 
   const resultStylish = readFile(getFixturePath('resultStylish.txt'));
   const resultPlain = readFile(getFixturePath('resultPlain.txt'));
-  const resultJson = readFile(getFixturePath('result.json'));
+  // const resultJson = readFile(getFixturePath('result.json'));
 
   expect(genDiff(pathOne, pathTwo)).toBe(resultStylish);
   expect(genDiff(pathOne, pathTwo, 'plain')).toBe(resultPlain);
-  expect(genDiff(pathOne, pathTwo, 'json')).toBe(resultJson);
+  // expect(genDiff(pathOne, pathTwo, 'json')).toBe(resultJson);
 });
