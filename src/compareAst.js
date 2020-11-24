@@ -3,14 +3,6 @@ import isPlainObject from 'lodash/isPlainObject.js';
 import union from 'lodash/union.js';
 import sortBy from 'lodash/sortBy';
 
-const createNode = (name, state, valueNew, valueOld, children) => ({
-  ...(name !== undefined && { name }),
-  ...(state !== undefined && { state }),
-  ...(valueNew !== undefined && { valueNew }),
-  ...(valueOld !== undefined && { valueOld }),
-  ...(children !== undefined && { children }),
-});
-
 const compareAst = (first, second) => {
   const keys = union(Object.keys(first), Object.keys(second));
   const sortedKyes = sortBy(keys);
@@ -22,13 +14,21 @@ const compareAst = (first, second) => {
     if (!has(first, key) && has(second, key)) {
       return {
         ...acc,
-        [key]: createNode(key, 'added', secondElem, undefined, undefined),
+        [key]: {
+          name: key,
+          state: 'added',
+          valueNew: secondElem,
+        },
       };
     }
     if (has(first, key) && !has(second, key)) {
       return {
         ...acc,
-        [key]: createNode(key, 'deleted', undefined, firstElem, undefined),
+        [key]: {
+          name: key,
+          state: 'deleted',
+          valueOld: firstElem,
+        },
       };
     }
     if (isPlainObject(firstElem) && isPlainObject(secondElem)) {
@@ -36,20 +36,34 @@ const compareAst = (first, second) => {
         firstElem,
         secondElem,
       );
+
       return {
         ...acc,
-        [key]: createNode(key, 'depth', undefined, undefined, children),
+        [key]: {
+          name: key,
+          state: 'depth',
+          children,
+        },
       };
     }
     if (firstElem !== secondElem) {
       return {
         ...acc,
-        [key]: createNode(key, 'changed', secondElem, firstElem, undefined),
+        [key]: {
+          name: key,
+          state: 'changed',
+          valueNew: secondElem,
+          valueOld: firstElem,
+        },
       };
     }
     return {
       ...acc,
-      [key]: createNode(key, 'notChanged', undefined, firstElem, undefined),
+      [key]: {
+        name: key,
+        state: 'notChanged',
+        valueOld: firstElem,
+      },
     };
   }, {});
   return result;
