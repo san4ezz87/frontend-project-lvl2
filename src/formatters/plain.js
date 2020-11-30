@@ -2,6 +2,32 @@ import isPlainObject from 'lodash/isPlainObject.js';
 
 const chandedStatuses = ['changed', 'deleted', 'added'];
 
+const buildKey = (path, name) => [...path, name].join('.');
+const buildValue = (value) => {
+  if (isPlainObject(value)) {
+    return '[complex value]';
+  }
+  if (typeof value === 'string') {
+    return `'${value}'`;
+  }
+  return value;
+};
+const render = (node) => {
+  const path = buildKey(node.path, node.name);
+  const valueOld = buildValue(node.valueOld);
+  const valueNew = buildValue(node.valueNew);
+
+  if (node.state === 'added') {
+    return `Property '${path}' was added with value: ${valueNew}`;
+  }
+
+  if (node.state === 'deleted') {
+    return `Property '${path}' was removed`;
+  }
+
+  return `Property '${path}' was updated. From ${valueOld} to ${valueNew}`;
+};
+
 const plain = (tree) => {
   const iter = (treeIn, accum, path) => {
     const nodes = Object.values(treeIn).sort();
@@ -24,25 +50,7 @@ const plain = (tree) => {
   };
   const filteredNodes = iter(tree, [], []);
 
-  const result = filteredNodes.map((node) => {
-    const path = [...node.path, node.name].join('.');
-    const valueOldTyped = typeof node.valueOld === 'string' ? `'${node.valueOld}'` : node.valueOld;
-    const valueNewTyped = typeof node.valueNew === 'string' ? `'${node.valueNew}'` : node.valueNew;
-
-    if (node.state === 'added') {
-      const value = isPlainObject(node.valueNew) ? '[complex value]' : valueNewTyped;
-      return `Property '${path}' was added with value: ${value}`;
-    }
-
-    if (node.state === 'deleted') {
-      return `Property '${path}' was removed`;
-    }
-
-    const valueOldFinished = isPlainObject(valueOldTyped) ? '[complex value]' : valueOldTyped;
-    const valueNewFinished = isPlainObject(valueNewTyped) ? '[complex value]' : valueNewTyped;
-
-    return `Property '${path}' was updated. From ${valueOldFinished} to ${valueNewFinished}`;
-  });
+  const result = filteredNodes.map(render);
 
   return result.join('\n');
 };
