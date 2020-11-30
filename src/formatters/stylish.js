@@ -29,63 +29,63 @@ const stringify = (value, replacer = ' ', spacesCount = 1) => {
   return result;
 };
 
+const buildKey = (indention, sign, name, value) => `${indention}${sign}${name}: ${value}`;
+
 const stylish = (tree) => {
   const iter = (treeIn, indentionCount) => {
     const values = Object.values(treeIn).sort();
     const indention = '  '.repeat(indentionCount);
+
     const res = values.map((node) => {
       const hasChildren = has(node, 'children');
+      const sign = signsMap[node.state];
 
       if (node.state === 'deleted') {
-        if (isPlainObject(node.valueOld)) {
-          return `${indention}${signsMap[node.state]}${node.name}: {\n${stringify(node.valueOld, '  ', indentionCount + 2)}\n  ${indention}}`;
-        }
-        return `${indention}${signsMap.deleted}${node.name}: ${node.valueOld}`;
+        const value = isPlainObject(node.valueOld) ? `{\n${stringify(node.valueOld, '  ', indentionCount + 2)}\n  ${indention}}` : node.valueOld;
+        return buildKey(indention, sign, node.name, value);
       }
 
       if (node.state === 'added') {
-        if (isPlainObject(node.valueNew)) {
-          return `${indention}${signsMap[node.state]}${node.name}: {\n${stringify(node.valueNew, '  ', indentionCount + 2)}\n  ${indention}}`;
-        }
-        return `${indention}${signsMap.added}${node.name}: ${node.valueNew}`;
+        const value = isPlainObject(node.valueNew) ? `{\n${stringify(node.valueNew, '  ', indentionCount + 2)}\n  ${indention}}` : node.valueNew;
+        return buildKey(indention, sign, node.name, value);
       }
 
       if (node.state === 'changed') {
         if (isPlainObject(node.valueNew)) {
+          const valueNew = `{\n${stringify(node.valueNew, '  ', indentionCount + 2)}\n    ${indention}}`;
           const changed = [];
-          changed.push(`${indention}${signsMap.deleted}${node.name}: ${node.valueOld}`);
-          changed.push(`${indention}${signsMap.added}${node.name}: {\n${stringify(node.valueOld, '  ', indentionCount + 2)}\n    ${indention}}`);
+          changed.push(buildKey(indention, sign, node.name, node.valueOld));
+          changed.push(buildKey(indention, sign, node.name, valueNew));
           return changed.join('\n');
         }
 
         if (isPlainObject(node.valueOld)) {
           const changed = [];
-          changed.push(`${indention}${signsMap.deleted}${node.name}: {\n${stringify(node.valueOld, '  ', indentionCount + 2)}\n  ${indention}}`);
-          changed.push(`${indention}${signsMap.added}${node.name}: ${node.valueNew}`);
+          const valueOld = `{\n${stringify(node.valueOld, '  ', indentionCount + 2)}\n  ${indention}}`;
+
+          changed.push(buildKey(indention, signsMap.deleted, node.name, valueOld));
+          changed.push(buildKey(indention, signsMap.added, node.name, node.valueNew));
           return changed.join('\n');
         }
 
         const changed = [];
-        changed.push(`${indention}${signsMap.deleted}${node.name}: ${node.valueOld}`);
-        changed.push(`${indention}${signsMap.added}${node.name}: ${node.valueNew}`);
+        changed.push(buildKey(indention, signsMap.deleted, node.name, node.valueOld));
+        changed.push(buildKey(indention, signsMap.added, node.name, node.valueNew));
+
         return changed.join('\n');
       }
 
       if (node.state === 'notChanged') {
-        if (isPlainObject(node.valueOld)) {
-          return `${indention}${signsMap[node.state]}${node.name}: {\n${stringify(node.valueOld, '  ', indentionCount + 2)}\n  ${indention}}`;
-        }
-        return `${indention}${signsMap[node.state]}${node.name}: ${node.valueOld || node.value}`;
+        const value = isPlainObject(node.valueOld) ? `{\n${stringify(node.valueOld, '  ', indentionCount + 2)}\n  ${indention}}` : node.valueOld || node.value;
+        return buildKey(indention, sign, node.name, value);
       }
 
       if (node.state === 'depth') {
-        if (hasChildren) {
-          return `${indention}${signsMap[node.state]}${node.name}: {\n${iter(node.children, indentionCount + 2)}\n  ${indention}}`;
-        }
-        return `${indention}${signsMap[node.state]}${node.name}: ${node.valueOld || node.value}`;
+        const value = hasChildren ? `{\n${iter(node.children, indentionCount + 2)}\n  ${indention}}` : node.valueOld || node.value;
+        return buildKey(indention, sign, node.name, value);
       }
 
-      return `${indention}${signsMap[node.state]}${node.name}: ${node.value}`;
+      return buildKey(indention, sign, node.name, node.value);
     }).join('\n');
     return res;
   };
