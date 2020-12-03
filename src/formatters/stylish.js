@@ -34,50 +34,59 @@ const buildValue = (value, indention, indentionCount) => (isPlainObject(value) ?
 const render = (key, value) => `${key}: ${value}`;
 
 const stylish = (tree) => {
-  const iter = (treeIn, indentionCount) => {
+  const iter = (treeIn, indentionCountUp) => {
     const values = Object.values(treeIn).sort();
-    const indention = '  '.repeat(indentionCount);
+    const indentionUp = '  '.repeat(indentionCountUp);
 
-    const res = values.map((node) => {
-      const hasChildren = has(node, 'children');
-      const sign = signsMap[node.state];
-      const key = buildkey(indention, sign, node.name);
-
-      if (node.state === 'deleted') {
+    const statesHandlers = {
+      deleted: (node, signsList, indention, indentionCount) => {
+        const sign = signsList[node.state];
         const value = buildValue(node.valueOld, indention, indentionCount);
+        const key = buildkey(indention, sign, node.name);
         return render(key, value);
-      }
-
-      if (node.state === 'added') {
+      },
+      added: (node, signsList, indention, indentionCount) => {
+        const sign = signsList[node.state];
         const value = buildValue(node.valueNew, indention, indentionCount);
+        const key = buildkey(indention, sign, node.name);
         return render(key, value);
-      }
-
-      if (node.state === 'changed') {
+      },
+      changed: (node, signsList, indention, indentionCount) => {
         const valueNew = buildValue(node.valueNew, indention, indentionCount);
         const valueOld = buildValue(node.valueOld, indention, indentionCount);
 
         const changed = [];
-        const keyOld = buildkey(indention, signsMap.deleted, node.name);
-        const keyNew = buildkey(indention, signsMap.added, node.name);
+        const keyOld = buildkey(indention, signsList.deleted, node.name);
+        const keyNew = buildkey(indention, signsList.added, node.name);
 
         changed.push(render(keyOld, valueOld));
         changed.push(render(keyNew, valueNew));
         return changed.join('\n');
-      }
-
-      if (node.state === 'notChanged') {
+      },
+      notChanged: (node, signsList, indention, indentionCount) => {
+        const sign = signsList[node.state];
         const value = buildValue(node.valueOld, indention, indentionCount);
+        const key = buildkey(indention, sign, node.name);
         return render(key, value);
-      }
-
-      if (node.state === 'depth') {
-        const value = hasChildren ? `{\n${iter(node.children, indentionCount + 2)}\n  ${indention}}` : node.valueOld;
+      },
+      depth: (node, signsList, indention, indentionCount) => {
+        const sign = signsList[node.state];
+        const value = has(node, 'children') ? `{\n${iter(node.children, indentionCount + 2)}\n  ${indention}}` : node.valueOld;
+        const key = buildkey(indention, sign, node.name);
         return render(key, value);
-      }
+      },
+    };
 
-      return render(key, node.value);
-    }).join('\n');
+    const stateHandler = (state) => {
+      const defaultHandler = (node, signsList, indention) => {
+        const sign = signsList[node.state];
+        const key = buildkey(indention, sign, node.name);
+        return render(key, node.value);
+      };
+      return typeof statesHandlers[state] === 'function' ? statesHandlers[state] : defaultHandler;
+    };
+
+    const res = values.map((node) => stateHandler(node.state)(node, signsMap, indentionUp, indentionCountUp)).join('\n');
     return res;
   };
 
