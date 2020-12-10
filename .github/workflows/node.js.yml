@@ -27,8 +27,6 @@ jobs:
       run: make ci
     - name: lint
       run: make lint
-    - name: test
-      run: make test
     - name: test-coverage
       uses: paambaati/codeclimate-action@v2.5.7
       env:
