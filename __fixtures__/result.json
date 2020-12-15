@@ -1,143 +1,116 @@
-{
-  "common": {
+[
+  {
     "name": "common",
-    "state": "notChanged",
-    "children": {
-      "follow": {
+    "state": "depth",
+    "children": [
+      {
         "name": "follow",
-        "valueNew": false,
-        "state": "added"
+        "state": "added",
+        "valueNew": false
       },
-      "setting1": {
+      {
         "name": "setting1",
-        "valueOld": "Value 1",
-        "state": "notChanged"
+        "state": "notChanged",
+        "valueOld": "Value 1"
       },
-      "setting2": {
+      {
         "name": "setting2",
-        "valueOld": 200,
-        "state": "deleted"
+        "state": "deleted",
+        "valueOld": 200
       },
-      "setting3": {
+      {
         "name": "setting3",
-        "valueOld": true,
+        "state": "changed",
         "valueNew": null,
-        "state": "changed"
+        "valueOld": true
       },
-      "setting4": {
+      {
         "name": "setting4",
-        "valueNew": "blah blah",
-        "state": "added"
+        "state": "added",
+        "valueNew": "blah blah"
       },
-      "setting5": {
+      {
         "name": "setting5",
         "state": "added",
-        "children": {
-          "key5": {
-            "name": "key5",
-            "value": "value5"
-          }
+        "valueNew": {
+          "key5": "value5"
         }
       },
-      "setting6": {
+      {
         "name": "setting6",
-        "state": "notChanged",
-        "children": {
-          "doge": {
+        "state": "depth",
+        "children": [
+          {
             "name": "doge",
-            "state": "notChanged",
-            "children": {
-              "wow": {
+            "state": "depth",
+            "children": [
+              {
                 "name": "wow",
-                "valueOld": "",
+                "state": "changed",
                 "valueNew": "so much",
-                "state": "changed"
+                "valueOld": ""
               }
-            }
+            ]
           },
-          "key": {
+          {
             "name": "key",
-            "valueOld": "value",
-            "state": "notChanged"
+            "state": "notChanged",
+            "valueOld": "value"
           },
-          "ops": {
+          {
             "name": "ops",
-            "valueNew": "vops",
-            "state": "added"
+            "state": "added",
+            "valueNew": "vops"
           }
-        }
+        ]
       }
-    }
+    ]
   },
-  "group1": {
+  {
     "name": "group1",
-    "state": "notChanged",
-    "children": {
-      "baz": {
+    "state": "depth",
+    "children": [
+      {
         "name": "baz",
-        "valueOld": "bas",
-        "valueNew": "bars",
-        "state": "changed"
-      },
-      "foo": {
-        "name": "foo",
-        "valueOld": "bar",
-        "state": "notChanged"
-      },
-      "nest": {
-        "name": "nest",
-        "valueNew": "str",
         "state": "changed",
-        "children": {
-          "key": {
-            "name": "key",
-            "value": "value"
-          }
+        "valueNew": "bars",
+        "valueOld": "bas"
+      },
+      {
+        "name": "foo",
+        "state": "notChanged",
+        "valueOld": "bar"
+      },
+      {
+        "name": "nest",
+        "state": "changed",
+        "valueNew": "str",
+        "valueOld": {
+          "key": "value"
         }
       }
-    }
+    ]
   },
-  "group2": {
+  {
     "name": "group2",
     "state": "deleted",
-    "children": {
-      "abc": {
-        "name": "abc",
-        "value": 12345
-      },
+    "valueOld": {
+      "abc": 12345,
       "deep": {
-        "name": "deep",
-        "children": {
-          "id": {
-            "name": "id",
-            "value": 45
-          }
-        }
+        "id": 45
       }
     }
   },
-  "group3": {
+  {
     "name": "group3",
     "state": "added",
-    "children": {
-      "fee": {
-        "name": "fee",
-        "value": 100500
-      },
+    "valueNew": {
+      "fee": 100500,
       "deep": {
-        "name": "deep",
-        "children": {
-          "id": {
-            "name": "id",
-            "children": {
-              "number": {
-                "name": "number",
-                "value": 45
-              }
-            }
-          }
+        "id": {
+          "number": 45
         }
       }
     }
   }
-}
+]

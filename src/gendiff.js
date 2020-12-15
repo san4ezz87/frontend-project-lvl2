@@ -1,6 +1,6 @@
 import parse from './parse.js';
 import { readFile, getDataFormat } from '../utils/utils.js';
-import compareAst from './compareAst.js';
+import buildAst from './buildAst.js';
 import getFormater from './formatters/index.js';
 
 const genDiff = (firstPath, secondPath, formaterType) => {
@@ -16,7 +16,7 @@ const genDiff = (firstPath, secondPath, formaterType) => {
     const firstObj = parse(first, firstType);
     const secondObj = parse(second, secondType);
 
-    const ast = compareAst(firstObj, secondObj);
+    const ast = buildAst(firstObj, secondObj);
     return format(ast);
   } catch (e) {
     console.error(e.message);

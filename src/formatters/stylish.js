@@ -1,6 +1,5 @@
 // import hasObjectKey from '../../utils/hasObjectKey.js';
-import has from 'lodash/has.js';
-import isPlainObject from 'lodash/isPlainObject.js';
+import _ from 'lodash/index.js';
 
 const signsMap = {
   deleted: '- ',
@@ -30,12 +29,11 @@ const stringify = (value, replacer = ' ', spacesCount = 1) => {
 };
 
 const buildkey = (indention, sign, name) => `${indention}${sign}${name}`;
-const buildValue = (value, indention, indentionCount) => (isPlainObject(value) ? `{\n${stringify(value, '  ', indentionCount + 2)}\n  ${indention}}` : value);
+const buildValue = (value, indention, indentionCount) => (_.isPlainObject(value) ? `{\n${stringify(value, '  ', indentionCount + 2)}\n  ${indention}}` : value);
 const render = (key, value) => `${key}: ${value}`;
 
 const stylish = (tree) => {
   const iter = (treeIn, indentionCountUp) => {
-    const values = Object.values(treeIn).sort();
     const indentionUp = '  '.repeat(indentionCountUp);
 
     const statesHandlers = {
@@ -71,7 +69,7 @@ const stylish = (tree) => {
       },
       depth: (node, signsList, indention, indentionCount) => {
         const sign = signsList[node.state];
-        const value = has(node, 'children') ? `{\n${iter(node.children, indentionCount + 2)}\n  ${indention}}` : node.valueOld;
+        const value = _.has(node, 'children') ? `{\n${iter(node.children, indentionCount + 2)}\n  ${indention}}` : node.valueOld;
         const key = buildkey(indention, sign, node.name);
         return render(key, value);
       },
@@ -86,7 +84,7 @@ const stylish = (tree) => {
       return typeof statesHandlers[state] === 'function' ? statesHandlers[state] : defaultHandler;
     };
 
-    const res = values.map((node) => stateHandler(node.state)(node, signsMap, indentionUp, indentionCountUp)).join('\n');
+    const res = treeIn.map((node) => stateHandler(node.state)(node, signsMap, indentionUp, indentionCountUp)).join('\n');
     return res;
   };
 

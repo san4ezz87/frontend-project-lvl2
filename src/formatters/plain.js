@@ -1,10 +1,10 @@
-import isPlainObject from 'lodash/isPlainObject.js';
+import _ from 'lodash/index.js';
 
 const chandedStatuses = ['changed', 'deleted', 'added'];
 
 const buildKey = (path, name) => [...path, name].join('.');
 const buildValue = (value) => {
-  if (isPlainObject(value)) {
+  if (_.isPlainObject(value)) {
     return '[complex value]';
   }
   if (typeof value === 'string') {
@@ -30,8 +30,7 @@ const render = (node) => {
 
 const plain = (tree) => {
   const iter = (treeIn, accum, path) => {
-    const nodes = Object.values(treeIn).sort();
-    const nodesChanged = nodes.reduce((acc, node) => {
+    const nodesChanged = treeIn.reduce((acc, node) => {
       const nodeWithPath = {
         ...node,
         path: [...path],
