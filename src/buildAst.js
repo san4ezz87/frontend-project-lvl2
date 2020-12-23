@@ -1,51 +1,51 @@
 import _ from 'lodash/index.js';
 
-const buildAst = (first, second) => {
-  const keys = _.union(_.keys(first), _.keys(second));
+const buildAst = (obj1, obj2) => {
+  const keys = _.union(_.keys(obj1), _.keys(obj2));
   const sortedKyes = _.sortBy(keys);
 
   const result = sortedKyes.map((key) => {
-    const firstElem = first[key];
-    const secondElem = second[key];
+    const elem1 = obj1[key];
+    const elem2 = obj2[key];
 
-    if (!_.has(first, key)) {
+    if (!_.has(obj1, key)) {
       return {
         name: key,
         state: 'added',
-        valueNew: secondElem,
+        valueNew: elem2,
       };
     }
-    if (!_.has(second, key)) {
+    if (!_.has(obj2, key)) {
       return {
         name: key,
         state: 'deleted',
-        valueOld: firstElem,
+        valueOld: elem1,
       };
     }
-    if (_.isPlainObject(firstElem) && _.isPlainObject(secondElem)) {
+    if (_.isPlainObject(elem1) && _.isPlainObject(elem2)) {
       const children = buildAst(
-        firstElem,
-        secondElem,
+        elem1,
+        elem2,
       );
 
       return {
         name: key,
-        state: 'depth',
+        state: 'incomparable',
         children,
       };
     }
-    if (firstElem !== secondElem) {
+    if (elem1 !== elem2) {
       return {
         name: key,
         state: 'changed',
-        valueNew: secondElem,
-        valueOld: firstElem,
+        valueNew: elem2,
+        valueOld: elem1,
       };
     }
     return {
       name: key,
-      state: 'notChanged',
-      valueOld: firstElem,
+      state: 'unchanged',
+      valueOld: elem1,
     };
   });
   return result;

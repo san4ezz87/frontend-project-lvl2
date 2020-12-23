@@ -4,9 +4,9 @@ import _ from 'lodash/index.js';
 const signsMap = {
   deleted: '- ',
   added: '+ ',
-  notChanged: '  ',
+  unchanged: '  ',
   undefined: '  ',
-  depth: '  ',
+  incomparable: '  ',
 };
 
 const stringify = (value, replacer = ' ', spacesCount = 1) => {
@@ -61,13 +61,13 @@ const stylish = (tree) => {
         changed.push(render(keyNew, valueNew));
         return changed.join('\n');
       },
-      notChanged: (node, signsList, indention, indentionCount) => {
+      unchanged: (node, signsList, indention, indentionCount) => {
         const sign = signsList[node.state];
         const value = buildValue(node.valueOld, indention, indentionCount);
         const key = buildkey(indention, sign, node.name);
         return render(key, value);
       },
-      depth: (node, signsList, indention, indentionCount) => {
+      incomparable: (node, signsList, indention, indentionCount) => {
         const sign = signsList[node.state];
         const value = _.has(node, 'children') ? `{\n${iter(node.children, indentionCount + 2)}\n  ${indention}}` : node.valueOld;
         const key = buildkey(indention, sign, node.name);

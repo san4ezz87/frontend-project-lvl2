@@ -1,7 +1,7 @@
 [
   {
     "name": "common",
-    "state": "depth",
+    "state": "incomparable",
     "children": [
       {
         "name": "follow",
@@ -10,7 +10,7 @@
       },
       {
         "name": "setting1",
-        "state": "notChanged",
+        "state": "unchanged",
         "valueOld": "Value 1"
       },
       {
@@ -38,11 +38,11 @@
       },
       {
         "name": "setting6",
-        "state": "depth",
+        "state": "incomparable",
         "children": [
           {
             "name": "doge",
-            "state": "depth",
+            "state": "incomparable",
             "children": [
               {
                 "name": "wow",
@@ -54,7 +54,7 @@
           },
           {
             "name": "key",
-            "state": "notChanged",
+            "state": "unchanged",
             "valueOld": "value"
           },
           {
@@ -68,7 +68,7 @@
   },
   {
     "name": "group1",
-    "state": "depth",
+    "state": "incomparable",
     "children": [
       {
         "name": "baz",
@@ -78,7 +78,7 @@
       },
       {
         "name": "foo",
-        "state": "notChanged",
+        "state": "unchanged",
         "valueOld": "bar"
       },
       {

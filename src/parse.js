@@ -1,5 +1,16 @@
 import yaml from 'js-yaml';
-import { parseIni } from '../utils/utils.js';
+import ini from 'ini';
+import _ from 'lodash/index.js';
+
+const numberifyValues = (obj) => _.mapValues(obj, (value) => {
+  if (_.isObjectLike(value)) {
+    return numberifyValues(value);
+  }
+  const parsed = parseFloat(value);
+  return _.isNaN(parsed) ? value : parsed;
+});
+
+const parseIni = (data) => numberifyValues(ini.parse(data));
 
 const parse = (data, format) => {
   switch (format) {
