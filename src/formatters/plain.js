@@ -1,55 +1,57 @@
 import _ from 'lodash/index.js';
 
-const chandedStatuses = ['changed', 'deleted', 'added'];
-
 const buildKey = (path, name) => [...path, name].join('.');
 const buildValue = (value) => {
   if (_.isPlainObject(value)) {
     return '[complex value]';
   }
+
   if (typeof value === 'string') {
     return `'${value}'`;
   }
   return value;
 };
+
 const render = (node) => {
   const path = buildKey(node.path, node.name);
-  const valueOld = buildValue(node.valueOld);
-  const valueNew = buildValue(node.valueNew);
 
-  if (node.state === 'added') {
-    return `Property '${path}' was added with value: ${valueNew}`;
+  if (node.type === 'added') {
+    const value = buildValue(node.value);
+    return `Property '${path}' was added with value: ${value}`;
   }
 
-  if (node.state === 'deleted') {
+  if (node.type === 'deleted') {
     return `Property '${path}' was removed`;
   }
 
-  return `Property '${path}' was updated. From ${valueOld} to ${valueNew}`;
+  if (node.type === 'changed') {
+    const valueNew = buildValue(node.valueNew);
+    const valueOld = buildValue(node.valueOld);
+    return `Property '${path}' was updated. From ${valueOld} to ${valueNew}`;
+  }
+  return '';
 };
 
 const plain = (tree) => {
-  const iter = (treeIn, accum, path) => {
-    const nodesChanged = treeIn.reduce((acc, node) => {
+  const iter = (treeIn, path) => {
+    const nodesChanged = treeIn.flatMap((node) => {
       const nodeWithPath = {
         ...node,
         path: [...path],
       };
 
-      if (chandedStatuses.includes(nodeWithPath.state)) {
-        return [...acc, nodeWithPath];
+      if (nodeWithPath.type === 'nested') {
+        return iter(nodeWithPath.children, [...path, nodeWithPath.name]);
       }
+      return nodeWithPath;
+    });
 
-      if (nodeWithPath.children) {
-        return [...acc, ...iter(nodeWithPath.children, [], [...path, nodeWithPath.name])];
-      }
-      return [...acc];
-    }, accum);
     return nodesChanged;
   };
-  const filteredNodes = iter(tree, [], []);
 
-  const result = filteredNodes.map(render);
+  const filteredNodes = iter(tree.children, []);
+
+  const result = filteredNodes.map(render).filter((node) => node);
 
   return result.join('\n');
 };

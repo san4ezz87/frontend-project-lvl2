@@ -1,116 +1,119 @@
-[
-  {
-    "name": "common",
-    "state": "incomparable",
-    "children": [
-      {
-        "name": "follow",
-        "state": "added",
-        "valueNew": false
-      },
-      {
-        "name": "setting1",
-        "state": "unchanged",
-        "valueOld": "Value 1"
-      },
-      {
-        "name": "setting2",
-        "state": "deleted",
-        "valueOld": 200
-      },
-      {
-        "name": "setting3",
-        "state": "changed",
-        "valueNew": null,
-        "valueOld": true
-      },
-      {
-        "name": "setting4",
-        "state": "added",
-        "valueNew": "blah blah"
-      },
-      {
-        "name": "setting5",
-        "state": "added",
-        "valueNew": {
-          "key5": "value5"
-        }
-      },
-      {
-        "name": "setting6",
-        "state": "incomparable",
-        "children": [
-          {
-            "name": "doge",
-            "state": "incomparable",
-            "children": [
-              {
-                "name": "wow",
-                "state": "changed",
-                "valueNew": "so much",
-                "valueOld": ""
-              }
-            ]
-          },
-          {
-            "name": "key",
-            "state": "unchanged",
-            "valueOld": "value"
-          },
-          {
-            "name": "ops",
-            "state": "added",
-            "valueNew": "vops"
+{
+  "name": "root",
+  "children": [
+    {
+      "name": "common",
+      "type": "nested",
+      "children": [
+        {
+          "name": "follow",
+          "type": "added",
+          "value": false
+        },
+        {
+          "name": "setting1",
+          "type": "unchanged",
+          "value": "Value 1"
+        },
+        {
+          "name": "setting2",
+          "type": "deleted",
+          "value": 200
+        },
+        {
+          "name": "setting3",
+          "type": "changed",
+          "valueNew": null,
+          "valueOld": true
+        },
+        {
+          "name": "setting4",
+          "type": "added",
+          "value": "blah blah"
+        },
+        {
+          "name": "setting5",
+          "type": "added",
+          "value": {
+            "key5": "value5"
           }
-        ]
-      }
-    ]
-  },
-  {
-    "name": "group1",
-    "state": "incomparable",
-    "children": [
-      {
-        "name": "baz",
-        "state": "changed",
-        "valueNew": "bars",
-        "valueOld": "bas"
-      },
-      {
-        "name": "foo",
-        "state": "unchanged",
-        "valueOld": "bar"
-      },
-      {
-        "name": "nest",
-        "state": "changed",
-        "valueNew": "str",
-        "valueOld": {
-          "key": "value"
+        },
+        {
+          "name": "setting6",
+          "type": "nested",
+          "children": [
+            {
+              "name": "doge",
+              "type": "nested",
+              "children": [
+                {
+                  "name": "wow",
+                  "type": "changed",
+                  "valueNew": "so much",
+                  "valueOld": ""
+                }
+              ]
+            },
+            {
+              "name": "key",
+              "type": "unchanged",
+              "value": "value"
+            },
+            {
+              "name": "ops",
+              "type": "added",
+              "value": "vops"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "group1",
+      "type": "nested",
+      "children": [
+        {
+          "name": "baz",
+          "type": "changed",
+          "valueNew": "bars",
+          "valueOld": "bas"
+        },
+        {
+          "name": "foo",
+          "type": "unchanged",
+          "value": "bar"
+        },
+        {
+          "name": "nest",
+          "type": "changed",
+          "valueNew": "str",
+          "valueOld": {
+            "key": "value"
+          }
+        }
+      ]
+    },
+    {
+      "name": "group2",
+      "type": "deleted",
+      "value": {
+        "abc": 12345,
+        "deep": {
+          "id": 45
         }
       }
-    ]
-  },
-  {
-    "name": "group2",
-    "state": "deleted",
-    "valueOld": {
-      "abc": 12345,
-      "deep": {
-        "id": 45
-      }
-    }
-  },
-  {
-    "name": "group3",
-    "state": "added",
-    "valueNew": {
-      "fee": 100500,
-      "deep": {
-        "id": {
-          "number": 45
+    },
+    {
+      "name": "group3",
+      "type": "added",
+      "value": {
+        "fee": 100500,
+        "deep": {
+          "id": {
+            "number": 45
+          }
         }
       }
     }
-  }
-]
+  ]
+}

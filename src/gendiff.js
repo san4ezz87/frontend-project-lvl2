@@ -16,8 +16,6 @@ const genDiff = (path1, path2, formaterType) => {
     const data1 = readFile(path1);
     const data2 = readFile(path2);
 
-    const format = getFormater(formaterType);
-
     const type1 = getDataFormat(path1);
     const type2 = getDataFormat(path2);
 
@@ -25,7 +23,7 @@ const genDiff = (path1, path2, formaterType) => {
     const obj2 = parse(data2, type2);
 
     const ast = buildAst(obj1, obj2);
-    return format(ast);
+    return getFormater(formaterType)(ast);
   } catch (e) {
     console.error(e.message);
     return '';
