@@ -12,38 +12,30 @@ const buildValue = (value) => {
   return value;
 };
 
-const render = (node) => {
-  const path = buildKey(node.path, node.name);
-
-  if (node.type === 'added') {
-    const value = buildValue(node.value);
-    return `Property '${path}' was added with value: ${value}`;
-  }
-
-  if (node.type === 'deleted') {
-    return `Property '${path}' was removed`;
-  }
-
-  if (node.type === 'changed') {
-    const valueNew = buildValue(node.valueNew);
-    const valueOld = buildValue(node.valueOld);
-    return `Property '${path}' was updated. From ${valueOld} to ${valueNew}`;
-  }
-  return '';
-};
-
 const plain = (tree) => {
   const iter = (treeIn, path) => {
     const nodesChanged = treeIn.flatMap((node) => {
-      const nodeWithPath = {
-        ...node,
-        path: [...path],
-      };
+      const pathStr = buildKey(path, node.name);
 
-      if (nodeWithPath.type === 'nested') {
-        return iter(nodeWithPath.children, [...path, nodeWithPath.name]);
+      if (node.type === 'added') {
+        const value = buildValue(node.value);
+        return `Property '${pathStr}' was added with value: ${value}`;
       }
-      return nodeWithPath;
+
+      if (node.type === 'deleted') {
+        return `Property '${pathStr}' was removed`;
+      }
+
+      if (node.type === 'changed') {
+        const valueNew = buildValue(node.valueNew);
+        const valueOld = buildValue(node.valueOld);
+        return `Property '${pathStr}' was updated. From ${valueOld} to ${valueNew}`;
+      }
+
+      if (node.type === 'nested') {
+        return iter(node.children, [...path, node.name]);
+      }
+      return '';
     });
 
     return nodesChanged;
@@ -51,7 +43,7 @@ const plain = (tree) => {
 
   const filteredNodes = iter(tree.children, []);
 
-  const result = filteredNodes.map(render).filter((node) => node);
+  const result = filteredNodes.filter((node) => node);
 
   return result.join('\n');
 };
