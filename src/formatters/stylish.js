@@ -1,7 +1,7 @@
 // import hasObjectKey from '../../utils/hasObjectKey.js';
 import _ from 'lodash/index.js';
 
-const stringify = (value, replacer = '   ', spacesCount = 1) => {
+const stringify = (value, replacer = '   ', depth = 1) => {
   if (typeof value !== 'object') {
     return value.toString();
   }
@@ -16,12 +16,11 @@ const stringify = (value, replacer = '   ', spacesCount = 1) => {
     });
   };
 
-  const result = `${iter(value, replacer, spacesCount).join('\n')}`;
+  const result = `${iter(value, replacer, depth).join('\n')}`;
   return result;
 };
 
 const buildValue = (value, indention, depthLevel) => (_.isPlainObject(value) ? `{\n${stringify(value, '    ', depthLevel + 1)}\n    ${indention}}` : value);
-const render = (indention, sign, key, value) => `${indention}${sign}${key}: ${value}`;
 
 const stylish = (tree) => {
   const iter = (treeIn, depthLevel) => {
@@ -30,26 +29,26 @@ const stylish = (tree) => {
     const statesHandlers = {
       deleted: (node, indention, depthLeveI) => {
         const value = buildValue(node.value, indention, depthLeveI);
-        return render(indention, '  - ', node.name, value);
+        return `${indention}  - ${node.name}: ${value}`;
       },
       added: (node, indention, depthLeveI) => {
         const value = buildValue(node.value, indention, depthLeveI);
-        return render(indention, '  + ', node.name, value);
+        return `${indention}  + ${node.name}: ${value}`;
       },
       changed: (node, indention, depthLeveI) => {
         const valueNew = buildValue(node.valueNew, indention, depthLeveI);
         const valueOld = buildValue(node.valueOld, indention, depthLeveI);
-        const stringNew = render(indention, '  - ', node.name, valueOld);
-        const stringOld = render(indention, '  + ', node.name, valueNew);
+        const stringNew = `${indention}  - ${node.name}: ${valueOld}`;
+        const stringOld = `${indention}  + ${node.name}: ${valueNew}`;
         return `${stringNew}\n${stringOld}`;
       },
       unchanged: (node, indention, depthLeveI) => {
         const value = buildValue(node.value, indention, depthLeveI);
-        return render(indention, '    ', node.name, value);
+        return `${indention}    ${node.name}: ${value}`;
       },
       nested: (node, indention, depthLeveI) => {
         const value = `{\n${iter(node.children, depthLeveI + 1)}\n    ${indention}}`;
-        return render(indention, '    ', node.name, value);
+        return `${indention}    ${node.name}: ${value}`;
       },
     };
 
