@@ -15,7 +15,7 @@ const buildValue = (value) => {
 const plain = (tree) => {
   const iter = (treeIn, path) => {
     const nodesChanged = treeIn.flatMap((node) => {
-      const pathStr = buildKey(path, node.name);
+      const pathStr = buildKey(path, node.key);
 
       if (node.type === 'added') {
         const value = buildValue(node.value);
@@ -33,9 +33,9 @@ const plain = (tree) => {
       }
 
       if (node.type === 'nested') {
-        return iter(node.children, [...path, node.name]);
+        return iter(node.children, [...path, node.key]);
       }
-      return '';
+      return [];
     });
 
     return nodesChanged;
@@ -43,9 +43,7 @@ const plain = (tree) => {
 
   const filteredNodes = iter(tree.children, []);
 
-  const result = filteredNodes.filter((node) => node);
-
-  return result.join('\n');
+  return filteredNodes.join('\n');
 };
 
 export default plain;
