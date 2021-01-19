@@ -12,38 +12,50 @@ const buildValue = (value) => {
   return value;
 };
 
-const plain = (tree) => {
-  const iter = (treeIn, path) => {
-    const nodesChanged = treeIn.flatMap((node) => {
-      const pathStr = buildKey(path, node.key);
+const iter = (nodeList, path) => {
+  const nodesChanged = nodeList.flatMap((node) => {
+    const pathStr = buildKey(path, node.key);
 
-      if (node.type === 'added') {
+    switch (node.type) {
+      case 'added': {
         const value = buildValue(node.value);
         return `Property '${pathStr}' was added with value: ${value}`;
       }
 
-      if (node.type === 'deleted') {
+      case 'deleted': {
         return `Property '${pathStr}' was removed`;
       }
 
-      if (node.type === 'changed') {
+      case 'changed': {
         const valueNew = buildValue(node.valueNew);
         const valueOld = buildValue(node.valueOld);
         return `Property '${pathStr}' was updated. From ${valueOld} to ${valueNew}`;
       }
 
-      if (node.type === 'nested') {
+      case 'nested': {
         return iter(node.children, [...path, node.key]);
       }
-      return [];
-    });
 
-    return nodesChanged;
-  };
+      case 'unchanged': {
+        return [];
+      }
 
-  const filteredNodes = iter(tree.children, []);
+      default: {
+        throw new Error(`Unknown node type ${node.type}`);
+      }
+    }
+  });
 
-  return filteredNodes.join('\n');
+  return nodesChanged;
+};
+
+const plain = (tree) => {
+  if (tree.type === 'root') {
+    const handledNodes = iter(tree.children, []);
+    return handledNodes.join('\n');
+  }
+
+  throw new Error(`${tree.type} is not root element of the tree`);
 };
 
 export default plain;

@@ -1,5 +1,5 @@
 {
-  "key": "root",
+  "type": "root",
   "children": [
     {
       "key": "common",

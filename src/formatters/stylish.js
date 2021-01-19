@@ -1,19 +1,23 @@
-import _ from 'lodash/index.js';
+import _ from 'lodash';
 
-const buildIndention = (depthLeve, divider = ' ', count = 4) => (`  ${divider.repeat(count).repeat(depthLeve)}`);
+const buildIndention = (depthLevel, count = 4) => `${' '.repeat(depthLevel * count)}`.slice(2);
 
-const stringify = (value, depth = 1) => {
+const stringify = (value, depth) => {
   if (typeof value !== 'object') {
     return value.toString();
   }
 
   const iter = (data, depthLevel) => {
-    const entries = Object.entries(data);
+    const nodeEntries = Object.entries(data);
     const indention = buildIndention(depthLevel);
 
-    return entries.map(([key, content]) => {
-      const newValue = typeof content === 'object' ? `{\n${iter(content, depthLevel + 1).join('\n')}\n  ${indention}}` : content;
-      return `  ${indention}${key}: ${newValue}`;
+    return nodeEntries.map(([key, content]) => {
+      if (typeof content === 'object') {
+        const handledContent = `{\n${iter(content, depthLevel + 1).join('\n')}\n  ${indention}}`;
+        return `${indention}  ${key}: ${handledContent}`;
+      }
+
+      return `${indention}  ${key}: ${content}`;
     });
   };
 
@@ -21,42 +25,50 @@ const stringify = (value, depth = 1) => {
   return result;
 };
 
-const buildValue = (value, indention, depthLevel) => (_.isPlainObject(value) ? `{\n${stringify(value, depthLevel + 1)}\n  ${indention}}` : value);
+const buildValue = (value, indention, depthLevel) => {
+  if (_.isPlainObject(value)) {
+    return `{\n${stringify(value, depthLevel + 1)}\n  ${indention}}`;
+  }
+  return value;
+};
 
 const stylish = (tree) => {
   const iter = (treeIn, depthLevel) => {
-    const cumputedIndention = buildIndention(depthLevel);
-
     const statesHandlers = {
-      deleted: (node, indention, depthLeveI) => {
-        const value = buildValue(node.value, indention, depthLeveI);
+      deleted: (node, depthLevelI) => {
+        const indention = buildIndention(depthLevelI);
+        const value = buildValue(node.value, indention, depthLevelI);
         return `${indention}- ${node.key}: ${value}`;
       },
-      added: (node, indention, depthLeveI) => {
-        const value = buildValue(node.value, indention, depthLeveI);
+      added: (node, depthLevelI) => {
+        const indention = buildIndention(depthLevelI);
+        const value = buildValue(node.value, indention, depthLevelI);
         return `${indention}+ ${node.key}: ${value}`;
       },
-      changed: (node, indention, depthLeveI) => {
-        const valueNew = buildValue(node.valueNew, indention, depthLeveI);
-        const valueOld = buildValue(node.valueOld, indention, depthLeveI);
+      changed: (node, depthLevelI) => {
+        const indention = buildIndention(depthLevelI);
+        const valueNew = buildValue(node.valueNew, indention, depthLevelI);
+        const valueOld = buildValue(node.valueOld, indention, depthLevelI);
         const stringNew = `${indention}- ${node.key}: ${valueOld}`;
         const stringOld = `${indention}+ ${node.key}: ${valueNew}`;
         return `${stringNew}\n${stringOld}`;
       },
-      unchanged: (node, indention, depthLeveI) => {
-        const value = buildValue(node.value, indention, depthLeveI);
+      unchanged: (node, depthLevelI) => {
+        const indention = buildIndention(depthLevelI);
+        const value = buildValue(node.value, indention, depthLevelI);
         return `${indention}  ${node.key}: ${value}`;
       },
-      nested: (node, indention, depthLeveI) => {
-        const value = `{\n${iter(node.children, depthLeveI + 1)}\n  ${indention}}`;
+      nested: (node, depthLevelI) => {
+        const indention = buildIndention(depthLevelI);
+        const value = `{\n${iter(node.children, depthLevelI + 1)}\n  ${indention}}`;
         return `${indention}  ${node.key}: ${value}`;
       },
     };
 
-    const res = treeIn.map((node) => statesHandlers[node.type](node, cumputedIndention, depthLevel)).join('\n');
+    const res = treeIn.map((node) => statesHandlers[node.type](node, depthLevel)).join('\n');
     return res;
   };
-  const result = iter(tree.children, 0);
+  const result = iter(tree.children, 1);
   return `{\n${result}\n}`;
 };
 
