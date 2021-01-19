@@ -34,38 +34,53 @@ const buildValue = (value, indention, depthLevel) => {
 
 const stylish = (tree) => {
   const iter = (treeIn, depthLevel) => {
-    const statesHandlers = {
-      deleted: (node, depthLevelI) => {
-        const indention = buildIndention(depthLevelI);
-        const value = buildValue(node.value, indention, depthLevelI);
-        return `${indention}- ${node.key}: ${value}`;
-      },
-      added: (node, depthLevelI) => {
-        const indention = buildIndention(depthLevelI);
-        const value = buildValue(node.value, indention, depthLevelI);
-        return `${indention}+ ${node.key}: ${value}`;
-      },
-      changed: (node, depthLevelI) => {
-        const indention = buildIndention(depthLevelI);
-        const valueNew = buildValue(node.valueNew, indention, depthLevelI);
-        const valueOld = buildValue(node.valueOld, indention, depthLevelI);
-        const stringNew = `${indention}- ${node.key}: ${valueOld}`;
-        const stringOld = `${indention}+ ${node.key}: ${valueNew}`;
-        return `${stringNew}\n${stringOld}`;
-      },
-      unchanged: (node, depthLevelI) => {
-        const indention = buildIndention(depthLevelI);
-        const value = buildValue(node.value, indention, depthLevelI);
-        return `${indention}  ${node.key}: ${value}`;
-      },
-      nested: (node, depthLevelI) => {
-        const indention = buildIndention(depthLevelI);
-        const value = `{\n${iter(node.children, depthLevelI + 1)}\n  ${indention}}`;
-        return `${indention}  ${node.key}: ${value}`;
-      },
+    const resolveNodeHandler = (nodeType) => {
+      switch (nodeType) {
+        case 'deleted': {
+          return (node, depthLevelI) => {
+            const indention = buildIndention(depthLevelI);
+            const value = buildValue(node.value, indention, depthLevelI);
+            return `${indention}- ${node.key}: ${value}`;
+          };
+        }
+        case 'added': {
+          return (node, depthLevelI) => {
+            const indention = buildIndention(depthLevelI);
+            const value = buildValue(node.value, indention, depthLevelI);
+            return `${indention}+ ${node.key}: ${value}`;
+          };
+        }
+        case 'changed': {
+          return (node, depthLevelI) => {
+            const indention = buildIndention(depthLevelI);
+            const valueNew = buildValue(node.valueNew, indention, depthLevelI);
+            const valueOld = buildValue(node.valueOld, indention, depthLevelI);
+            const stringNew = `${indention}- ${node.key}: ${valueOld}`;
+            const stringOld = `${indention}+ ${node.key}: ${valueNew}`;
+            return `${stringNew}\n${stringOld}`;
+          };
+        }
+        case 'unchanged': {
+          return (node, depthLevelI) => {
+            const indention = buildIndention(depthLevelI);
+            const value = buildValue(node.value, indention, depthLevelI);
+            return `${indention}  ${node.key}: ${value}`;
+          };
+        }
+        case 'nested': {
+          return (node, depthLevelI) => {
+            const indention = buildIndention(depthLevelI);
+            const value = `{\n${iter(node.children, depthLevelI + 1)}\n  ${indention}}`;
+            return `${indention}  ${node.key}: ${value}`;
+          };
+        }
+        default: {
+          throw new Error(`Unknown node type ${nodeType}`);
+        }
+      }
     };
 
-    const res = treeIn.map((node) => statesHandlers[node.type](node, depthLevel)).join('\n');
+    const res = treeIn.map((node) => resolveNodeHandler(node.type)(node, depthLevel)).join('\n');
     return res;
   };
   const result = iter(tree.children, 1);

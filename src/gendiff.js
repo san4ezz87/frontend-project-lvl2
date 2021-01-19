@@ -25,7 +25,7 @@ const genDiff = (path1, path2, formaterType) => {
     const ast = buildAst(obj1, obj2);
     return getFormater(formaterType)(ast);
   } catch (e) {
-    console.error(e.message);
+    console.error(e);
     return '';
   }
 };
