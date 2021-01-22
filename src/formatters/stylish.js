@@ -1,28 +1,21 @@
 import _ from 'lodash';
 
-const buildIndention = (depthLevel, count = 4) => `${' '.repeat(depthLevel * count)}`.slice(2);
+const buildIndention = (depthLevel, count = 4) => `${' '.repeat(depthLevel * count - 2)}`;
 
 const stringify = (value, depth) => {
-  if (typeof value !== 'object') {
-    return value.toString();
-  }
+  const nodeEntries = Object.entries(value);
+  const indention = buildIndention(depth);
 
-  const iter = (data, depthLevel) => {
-    const nodeEntries = Object.entries(data);
-    const indention = buildIndention(depthLevel);
+  const result = nodeEntries.map(([key, content]) => {
+    if (typeof content === 'object') {
+      const handledContent = `{\n${stringify(content, depth + 1)}\n  ${indention}}`;
+      return `${indention}  ${key}: ${handledContent}`;
+    }
 
-    return nodeEntries.map(([key, content]) => {
-      if (typeof content === 'object') {
-        const handledContent = `{\n${iter(content, depthLevel + 1).join('\n')}\n  ${indention}}`;
-        return `${indention}  ${key}: ${handledContent}`;
-      }
+    return `${indention}  ${key}: ${content}`;
+  });
 
-      return `${indention}  ${key}: ${content}`;
-    });
-  };
-
-  const result = `${iter(value, depth).join('\n')}`;
-  return result;
+  return `${result.join('\n')}`;
 };
 
 const buildValue = (value, indention, depthLevel) => {
@@ -36,6 +29,9 @@ const stylish = (tree) => {
   const iter = (treeIn, depthLevel) => {
     const resolveNodeHandler = (nodeType) => {
       switch (nodeType) {
+        case 'root': {
+          return (node, depthLevelI) => `{\n${iter(node.children, depthLevelI)}\n}`;
+        }
         case 'deleted': {
           return (node, depthLevelI) => {
             const indention = buildIndention(depthLevelI);
@@ -83,8 +79,8 @@ const stylish = (tree) => {
     const res = treeIn.map((node) => resolveNodeHandler(node.type)(node, depthLevel)).join('\n');
     return res;
   };
-  const result = iter(tree.children, 1);
-  return `{\n${result}\n}`;
+  return iter(tree, 1);
 };
 
 export default stylish;
+ 

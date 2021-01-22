@@ -49,7 +49,7 @@ const buildAst = (obj1, obj2) => {
   });
 };
 
-export default (obj1, obj2) => ({
+export default (obj1, obj2) => ([{
   type: 'root',
   children: buildAst(obj1, obj2),
-});
+}]);

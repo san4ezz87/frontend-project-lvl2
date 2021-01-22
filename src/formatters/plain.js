@@ -17,6 +17,9 @@ const iter = (nodeList, path) => {
     const pathStr = buildKey(path, node.key);
 
     switch (node.type) {
+      case 'root': {
+        return iter(node.children, '').join('\n');
+      }
       case 'added': {
         const value = buildValue(node.value);
         return `Property '${pathStr}' was added with value: ${value}`;
@@ -49,13 +52,6 @@ const iter = (nodeList, path) => {
   return nodesChanged;
 };
 
-const plain = (tree) => {
-  if (tree.type === 'root') {
-    const handledNodes = iter(tree.children, []);
-    return handledNodes.join('\n');
-  }
-
-  throw new Error(`${tree.type} is not root element of the tree`);
-};
+const plain = (tree) => iter(tree, []).join('');
 
 export default plain;
