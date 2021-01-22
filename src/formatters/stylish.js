@@ -83,4 +83,3 @@ const stylish = (tree) => {
 };
 
 export default stylish;
- 
