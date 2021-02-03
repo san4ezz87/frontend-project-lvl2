@@ -1,7 +1,7 @@
 import _ from 'lodash/index.js';
 
-const buildKey = (path, name) => [...path, name].join('.');
-const buildValue = (value) => {
+const getFullPath = (path, name) => [...path, name].join('.');
+const stringify = (value) => {
   if (_.isPlainObject(value)) {
     return '[complex value]';
   }
@@ -13,24 +13,25 @@ const buildValue = (value) => {
 };
 
 const iter = (node, path) => {
-  const pathStr = buildKey(path, node.key);
-
   switch (node.type) {
     case 'root': {
-      return node.children.flatMap((child) => iter(child, '')).join('\n');
+      return node.children.flatMap((child) => iter(child, ''));
     }
     case 'added': {
-      const value = buildValue(node.value);
+      const value = stringify(node.value);
+      const pathStr = getFullPath(path, node.key);
       return `Property '${pathStr}' was added with value: ${value}`;
     }
 
     case 'deleted': {
+      const pathStr = getFullPath(path, node.key);
       return `Property '${pathStr}' was removed`;
     }
 
     case 'changed': {
-      const valueNew = buildValue(node.valueNew);
-      const valueOld = buildValue(node.valueOld);
+      const valueNew = stringify(node.valueNew);
+      const valueOld = stringify(node.valueOld);
+      const pathStr = getFullPath(path, node.key);
       return `Property '${pathStr}' was updated. From ${valueOld} to ${valueNew}`;
     }
 
@@ -49,7 +50,7 @@ const iter = (node, path) => {
 };
 
 const plain = (tree) => {
-  const res = iter(tree, []);
+  const res = iter(tree, []).join('\n');
   return res;
 };
 

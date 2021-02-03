@@ -11,21 +11,15 @@ const numberifyValues = (obj) => _.mapValues(obj, (value) => {
 });
 
 const parseIni = (data) => numberifyValues(ini.parse(data));
+const parsers = {
+  json: JSON.parse,
+  yml: yaml.safeLoad,
+  ini: parseIni,
+};
 
 const parse = (data, format) => {
-  switch (format) {
-    case 'json':
-      return JSON.parse(data);
-
-    case 'yml':
-      return yaml.safeLoad(data);
-
-    case 'ini':
-      return parseIni(data);
-
-    default:
-      throw new Error('не верынй формат файла');
-  }
+  const parser = parsers[format];
+  return (parser && parser(data)) || new Error('не верный формат файла');
 };
 
 export default parse;
