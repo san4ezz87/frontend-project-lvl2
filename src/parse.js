@@ -19,7 +19,10 @@ const parsers = {
 
 const parse = (data, format) => {
   const parser = parsers[format];
-  return (parser && parser(data)) || new Error('не верный формат файла');
+  if (parser) {
+    return parser(data);
+  }
+  throw new Error('не верный формат файла');
 };
 
 export default parse;

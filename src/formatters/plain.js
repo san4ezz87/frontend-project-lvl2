@@ -1,6 +1,6 @@
 import _ from 'lodash/index.js';
 
-const getFullPath = (path, name) => [...path, name].join('.');
+const getPropertyName = (path, name) => [...path, name].join('.');
 const stringify = (value) => {
   if (_.isPlainObject(value)) {
     return '[complex value]';
@@ -19,20 +19,20 @@ const iter = (node, path) => {
     }
     case 'added': {
       const value = stringify(node.value);
-      const pathStr = getFullPath(path, node.key);
-      return `Property '${pathStr}' was added with value: ${value}`;
+      const propertyName = getPropertyName(path, node.key);
+      return `Property '${propertyName}' was added with value: ${value}`;
     }
 
     case 'deleted': {
-      const pathStr = getFullPath(path, node.key);
-      return `Property '${pathStr}' was removed`;
+      const propertyName = getPropertyName(path, node.key);
+      return `Property '${propertyName}' was removed`;
     }
 
     case 'changed': {
       const valueNew = stringify(node.valueNew);
       const valueOld = stringify(node.valueOld);
-      const pathStr = getFullPath(path, node.key);
-      return `Property '${pathStr}' was updated. From ${valueOld} to ${valueNew}`;
+      const propertyName = getPropertyName(path, node.key);
+      return `Property '${propertyName}' was updated. From ${valueOld} to ${valueNew}`;
     }
 
     case 'nested': {

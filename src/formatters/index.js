@@ -3,14 +3,17 @@ import plain from './plain.js';
 
 const formaters = {
   plain,
-  json: (tree) => JSON.stringify(tree),
+  json: JSON.stringify,
   stylish,
 };
 
-const formate = (format = 'stylish', ast) => {
-  const formater = formaters[format];
+const format = (formatType = 'stylish', ast) => {
+  const formater = formaters[formatType];
+  if (formater) {
+    return formater(ast);
+  }
 
-  return (formater && formater(ast)) || new Error('не верное имя форматера');
+  throw new Error('не верное имя форматера');
 };
 
-export default formate;
+export default format;

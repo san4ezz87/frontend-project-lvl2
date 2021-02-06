@@ -21,8 +21,20 @@ test.each(formats)('different formats of files %s', (format) => {
   const filePath2 = getFixturePath(`file2.${format}`);
 
   expect(genDiff(filePath1, filePath2)).toBe(resultStylish);
+
   expect(genDiff(filePath1, filePath2, 'stylish')).toBe(resultStylish);
   expect(genDiff(filePath1, filePath2, 'plain')).toBe(resultPlain);
-  expect(() => JSON.parse(genDiff(filePath1, filePath2, 'json'))).not.toThrow();
   expect(genDiff(filePath1, filePath2, 'json')).toBe(resultJson);
+
+  expect(() => JSON.parse(genDiff(filePath1, filePath2, 'json'))).not.toThrow();
+  expect(() => genDiff(filePath1, filePath2, 'jsone')).toThrow();
+});
+
+const wrongFormats = ['txt'];
+
+test.each(wrongFormats)('wrong formats of files %s', (format) => {
+  const filePath1 = getFixturePath(`file1.${format}`);
+  const filePath2 = getFixturePath(`file2.${format}`);
+
+  expect(() => genDiff(filePath1, filePath2)).toThrow();
 });
