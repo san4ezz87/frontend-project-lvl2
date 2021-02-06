@@ -1,1 +1,1 @@
- check if an error will occurr
+ check if an error will occur
