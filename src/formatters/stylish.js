@@ -6,9 +6,8 @@ const stringify = (value, depth) => {
   if (!_.isPlainObject(value)) {
     return value;
   }
-  const nodeEntries = Object.entries(value);
 
-  const result = nodeEntries.map(([key, content]) => {
+  const result = Object.entries(value).map(([key, content]) => {
     const handledContent = `${stringify(content, depth + 1)}`;
     return `${indent(depth + 1)}  ${key}: ${handledContent}`;
   });
