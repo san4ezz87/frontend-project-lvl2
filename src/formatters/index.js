@@ -13,7 +13,7 @@ const format = (formatType = 'stylish', ast) => {
     return formater(ast);
   }
 
-  throw new Error('не верное имя форматера');
+  throw new Error('неверное имя форматера');
 };
 
 export default format;

@@ -22,7 +22,7 @@ const parse = (data, format) => {
   if (parser) {
     return parser(data);
   }
-  throw new Error('не верный формат файла');
+  throw new Error('неверный формат файла');
 };
 
 export default parse;
